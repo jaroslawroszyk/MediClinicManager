@@ -1,14 +1,13 @@
 package pl.clinicmanager.model;
 
-import pl.clinicmanager.model.LocalDateProvider;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.time.format.DateTimeParseException;
 import java.time.Period;
 
 public class BirthDate {
-    private LocalDate birthDate;
-    private LocalDateProvider dateProvider;
+    private final LocalDate birthDate;
+    private final LocalDateProvider dateProvider;
 
     public BirthDate(String birthDateString) {
         this(birthDateString, LocalDate::now);

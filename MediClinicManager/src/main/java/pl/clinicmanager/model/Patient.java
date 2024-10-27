@@ -10,6 +10,10 @@ public class Patient {
     private String phoneNumber;
     private String email; // TODO: that field can be optional
 
+    public Patient(){
+
+    }
+
     public Patient(String first, String last) { // for test purposes - should be deleted later
         this.firstName = first;
         this.lastName = last;
