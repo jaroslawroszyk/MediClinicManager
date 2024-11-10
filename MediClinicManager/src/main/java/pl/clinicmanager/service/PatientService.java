@@ -12,8 +12,18 @@ public class PatientService {
         this.patientRepository = new PatientRepository();
     }
 
-    public void addPatient(Patient patient) {
-        patientRepository.save(patient);
+    // Constructor for testing (allows dependency injection) its needed?
+    public PatientService(PatientRepository patientRepository) {
+        this.patientRepository = patientRepository;
+    }
+
+    public boolean addPatient(Patient patient) {
+        try {
+            patientRepository.save(patient);
+            return true;
+        } catch (Exception e) {
+            return false;
+        }
     }
 
     public Patient findPatientByPesel(String pesel) {
