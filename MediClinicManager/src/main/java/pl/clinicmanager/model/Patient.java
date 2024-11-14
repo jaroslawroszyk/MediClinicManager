@@ -1,25 +1,31 @@
 package pl.clinicmanager.model;
 
-public class Patient {
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
+public class Patient {
+    @NotNull
     private String firstName;
+    @NotNull
     private String lastName;
+    @NotNull
     private String pesel;
     private BirthDate birthDate;
     private int age;
     private String phoneNumber;
+    @Nullable
     private String email; // TODO: that field can be optional
 
-    public Patient(){
+    public Patient() {
 
     }
 
-    public Patient(String first, String last) { // for test purposes - should be deleted later
+    public Patient(String first, String last) { // for test purposes - should be deleted after implementation
         this.firstName = first;
         this.lastName = last;
     }
 
-    public Patient(String first, String last, String pesel, BirthDate birthDate, int age, String phoneNumber, String email) {
+    public Patient(String first, String last, String pesel, BirthDate birthDate, int age, String phoneNumber, @Nullable String email) {
         setFirstName(first);
         setLastName(last);
         setPesel(pesel);
@@ -29,21 +35,35 @@ public class Patient {
         setEmail(email);
     }
 
+    //    public void setFirstName(String firstName) {
+//        if (firstName != null && !firstName.isEmpty()) {
+//            this.firstName = capitalize(firstName);
+//        } else {
+//            this.firstName = firstName;
+//        }
+//    }
+//
+//    public void setLastName(String lastName) {
+//        if (lastName != null && !lastName.isEmpty()) {
+//            this.lastName = capitalize(lastName);
+//        } else {
+//            this.lastName = lastName;
+//        }
+//    }
     public void setFirstName(String firstName) {
-        if (firstName != null && !firstName.isEmpty()) {
-            this.firstName = capitalize(firstName);
-        } else {
-            this.firstName = firstName;
+        if (firstName == null || firstName.isEmpty()) {
+            throw new IllegalArgumentException("First name cannot be null or empty");
         }
+        this.firstName = capitalize(firstName);
     }
 
     public void setLastName(String lastName) {
-        if (lastName != null && !lastName.isEmpty()) {
-            this.lastName = capitalize(lastName);
-        } else {
-            this.lastName = lastName;
+        if (lastName == null || lastName.isEmpty()) {
+            throw new IllegalArgumentException("Last name cannot be null or empty");
         }
+        this.lastName = capitalize(lastName);
     }
+
 
     public void setPhoneNumber(String phoneNumber) {
         if (Validator.isValidPhoneNumber(phoneNumber)) {
@@ -54,8 +74,7 @@ public class Patient {
     }
 
     public void setAge(int age) {
-        if (age < 0)
-        {
+        if (age < 0) {
             throw new IllegalArgumentException("Age cannot be negative");
         }
         this.age = age;
@@ -73,13 +92,21 @@ public class Patient {
         }
     }
 
-    public void setEmail(String email) {
-        if (Validator.isValidEmail(email)) {
+    //    public void setEmail(String email) {
+//        if (Validator.isValidEmail(email)) {
+//            this.email = email;
+//        } else {
+//            throw new IllegalArgumentException("Invalid email format");
+//        }
+//    }
+    public void setEmail(@Nullable String email) {
+        if (email == null || Validator.isValidEmail(email)) {
             this.email = email;
         } else {
             throw new IllegalArgumentException("Invalid email format");
         }
     }
+
 
     public String getFirstName() {
         return firstName;
@@ -101,6 +128,7 @@ public class Patient {
         return age;
     }
 
+    @Nullable
     public String getEmail() {
         return email;
     }

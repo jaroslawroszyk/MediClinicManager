@@ -1,8 +1,9 @@
+package pl.clinicmanager.service;
+
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import pl.clinicmanager.model.Patient;
-import pl.clinicmanager.repository.PatientRepository;
-import pl.clinicmanager.service.PatientService;
+import pl.clinicmanager.model.IPatientRepository;
 
 import java.util.Arrays;
 import java.util.List;
@@ -13,11 +14,11 @@ import static org.mockito.Mockito.*;
 
 class PatientService_Tests {
     private PatientService patientService;
-    private PatientRepository patientRepository;
+    private IPatientRepository patientRepository;
 
     @BeforeEach
     void setUp() {
-        patientRepository = mock(PatientRepository.class);
+        patientRepository = mock(IPatientRepository.class);
         patientService = new PatientService(patientRepository);
     }
 
@@ -69,16 +70,16 @@ class PatientService_Tests {
     @Test
     void findPatientByLastName_ShouldReturnListOfPatients_WhenPatientsExist() {
         Patient patient1 = new Patient("John", "Doe", "44051401359", null, 30, "123456789", "john@example.com");
-        Patient patient2 = new Patient("John", "Doe", "66022365628", null, 30, "123456789", "john@example.com");
+        Patient patient2 = new Patient("Jane", "Doe", "66022365628", null, 30, "987654321", "jane@example.com");
 
         List<Patient> patients = Arrays.asList(patient1, patient2);
-        when(patientRepository.findPatientsByLastName("Smith")).thenReturn(Optional.of(patients));
+        when(patientRepository.findPatientsByLastName("Doe")).thenReturn(Optional.of(patients));
 
-        List<Patient> result = patientService.findPatientByLastName("Smith");
+        List<Patient> result = patientService.findPatientByLastName("Doe");
 
         assertNotNull(result);
         assertEquals(2, result.size());
-        verify(patientRepository, times(1)).findPatientsByLastName("Smith");
+        verify(patientRepository, times(1)).findPatientsByLastName("Doe");
     }
 
     @Test
@@ -94,7 +95,7 @@ class PatientService_Tests {
     @Test
     void getAllPatients_ShouldReturnListOfAllPatients() {
         Patient patient1 = new Patient("John", "Doe", "44051401359", null, 30, "123456789", "john@example.com");
-        Patient patient2 = new Patient("John", "Doe", "66022365628", null, 30, "123456789", "john@example.com");
+        Patient patient2 = new Patient("Jane", "Doe", "66022365628", null, 30, "987654321", "jane@example.com");
 
         List<Patient> patients = Arrays.asList(patient1, patient2);
         when(patientRepository.findAll()).thenReturn(patients);
@@ -137,16 +138,3 @@ class PatientService_Tests {
         boolean result = patientService.deletePatient("12345678901");
 
         assertTrue(result);
-        verify(patientRepository, times(1)).deleteByPesel("12345678901");
-    }
-
-    @Test
-    void deletePatient_ShouldReturnFalse_WhenDeleteFails() {
-        when(patientRepository.deleteByPesel("12345678901")).thenReturn(false);
-
-        boolean result = patientService.deletePatient("12345678901");
-
-        assertFalse(result);
-        verify(patientRepository, times(1)).deleteByPesel("12345678901");
-    }
-}

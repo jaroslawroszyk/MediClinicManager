@@ -1,22 +1,25 @@
 package pl.clinicmanager.service;
 
+import pl.clinicmanager.model.IPatientRepository;
+import pl.clinicmanager.model.IPatientService;
 import pl.clinicmanager.model.Patient;
 import pl.clinicmanager.repository.PatientRepository;
 
 import java.util.List;
 
-public class PatientService {
-    private final PatientRepository patientRepository;
+public class PatientService implements IPatientService {
+    private IPatientRepository patientRepository;
 
-    public PatientService() {
-        this.patientRepository = new PatientRepository();
-    }
+//    public PatientService() {
+//        this.patientRepository = new PatientRepository();
+//    }
 
     // Constructor for testing (allows dependency injection) its needed?
-    public PatientService(PatientRepository patientRepository) {
+    public PatientService(IPatientRepository patientRepository) {
         this.patientRepository = patientRepository;
     }
 
+    @Override
     public boolean addPatient(Patient patient) {
         try {
             patientRepository.save(patient);
@@ -26,10 +29,12 @@ public class PatientService {
         }
     }
 
+    @Override
     public Patient findPatientByPesel(String pesel) {
         return patientRepository.findByPesel(pesel).orElse(null);
     }
 
+    @Override
     public List<Patient> findPatientByLastName(String lastName) {
         return patientRepository.findPatientsByLastName(lastName).orElse(null);
     }
@@ -45,14 +50,17 @@ public class PatientService {
         System.out.println("Email " + found.getEmail());
     }
 
+    @Override
     public List<Patient> getAllPatients() {
         return patientRepository.findAll();
     }
 
+    @Override
     public boolean updatePatient(String pesel, Patient updatedPatient) {
         return patientRepository.updateByPesel(pesel, updatedPatient);
     }
 
+    @Override
     public boolean deletePatient(String pesel) {
         return patientRepository.deleteByPesel(pesel);
     }

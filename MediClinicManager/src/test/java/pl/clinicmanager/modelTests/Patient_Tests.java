@@ -34,15 +34,15 @@ public class Patient_Tests {
         patient.setFirstName("alice");
         Assertions.assertEquals("Alice", patient.getFirstName());
     }
-
-    @Test
-    public void testSetFirstNameHandlesEmptyAndNull() {
-        patient.setFirstName("");
-        Assertions.assertEquals("", patient.getFirstName());
-
-        patient.setFirstName(null);
-        Assertions.assertNull(patient.getFirstName());
-    }
+//
+//    @Test
+//    public void testSetFirstNameHandlesEmptyAndNull() {
+//        patient.setFirstName("");
+//        Assertions.assertEquals("", patient.getFirstName());
+//
+//        patient.setFirstName(null);
+//        Assertions.assertNull(patient.getFirstName());
+//    }
 
     @Test
     public void testSetLastNameCapitalizesFirstLetter() {
@@ -56,23 +56,23 @@ public class Patient_Tests {
         Assertions.assertEquals("Carlson", patient.getLastName());
     }
 
-    @Test
-    public void testSetLastNameHandlesEmptyAndNull() {
-        patient.setLastName("");
-        Assertions.assertEquals("", patient.getLastName());
+//    @Test
+//    public void testSetLastNameHandlesEmptyAndNull() {
+//        patient.setLastName("");
+//        Assertions.assertEquals("", patient.getLastName());
+//
+//        patient.setLastName(null);
+//        Assertions.assertNull(patient.getLastName());
+//    }
 
-        patient.setLastName(null);
-        Assertions.assertNull(patient.getLastName());
-    }
-
-    @Test
-    public void testSetAge() {
-        patient.setLastName("");
-        Assertions.assertEquals("", patient.getLastName());
-
-        patient.setLastName(null);
-        Assertions.assertNull(patient.getLastName());
-    }
+//    @Test
+//    public void testSetAge() {
+//        patient.setLastName("");
+//        Assertions.assertEquals("", patient.getLastName());
+//
+//        patient.setLastName(null);
+//        Assertions.assertNull(patient.getLastName());
+//    }
 
     @Test
     public void testInvalidAgeThrowsException() {
@@ -160,7 +160,7 @@ public class Patient_Tests {
         Exception exception = Assertions.assertThrows(IllegalArgumentException.class, () -> {
             patient.setPesel(invalidPesel);
         });
-        Assertions.assertEquals(exception.getMessage(),"Invalid PESEL format");
+        Assertions.assertEquals(exception.getMessage(), "Invalid PESEL format");
     }
 
     @Test
@@ -168,7 +168,7 @@ public class Patient_Tests {
         Exception exception = Assertions.assertThrows(IllegalArgumentException.class, () -> {
             patient.setPesel(null);
         });
-        Assertions. assertEquals(exception.getMessage(), "Invalid PESEL format");
+        Assertions.assertEquals(exception.getMessage(), "Invalid PESEL format");
     }
 
 }

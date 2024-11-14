@@ -28,7 +28,7 @@ public class Validator {
     public static boolean isValidPhoneNumber(String phoneNumber) {
         return phoneNumber != null && PHONE_PATTERN.matcher(phoneNumber).matches();
     }
-
+    
     private static boolean validatePeselChecksum(String pesel) {
         int[] weights = {1, 3, 7, 9, 1, 3, 7, 9, 1, 3};
         int sum = 0;
