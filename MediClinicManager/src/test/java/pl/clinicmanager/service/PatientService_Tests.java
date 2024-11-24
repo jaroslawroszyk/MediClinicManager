@@ -138,3 +138,5 @@ class PatientService_Tests {
         boolean result = patientService.deletePatient("12345678901");
 
         assertTrue(result);
+    }
+}
