@@ -19,6 +19,7 @@ public class Validator {
     /**
      * Validates whether the given PESEL is valid.
      * Checks the format (11 numeric digits) and verifies the checksum.
+     *
      * @param pesel the PESEL string to validate
      * @return true if the PESEL is valid, false otherwise
      */
@@ -32,6 +33,7 @@ public class Validator {
 
     /**
      * Validates whether the given email is in a proper format.
+     *
      * @param email the email string to validate
      * @return true if the email is valid, false otherwise
      */
@@ -42,6 +44,7 @@ public class Validator {
     /**
      * Validates whether the given phone number is in a proper format.
      * Allows an optional "+" at the start and digits between 9 and 15 characters.
+     *
      * @param phoneNumber the phone number string to validate
      * @return true if the phone number is valid, false otherwise
      */
@@ -53,6 +56,7 @@ public class Validator {
      * Validates the checksum of a PESEL number.
      * The checksum is calculated using predefined weights for the first 10 digits
      * and comparing it to the last (11th) digit.
+     *
      * @param pesel the PESEL string to validate
      * @return true if the checksum is valid, false otherwise
      */

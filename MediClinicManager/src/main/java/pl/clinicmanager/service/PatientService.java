@@ -18,17 +18,21 @@ public class PatientService implements IPatientService {
 //    public PatientService() {
 //        this.patientRepository = new PatientRepository();
 //    }
+
     /**
      * Constructor for injecting a custom implementation of IPatientRepository.
      * This is useful for testing or switching repository implementations without modifying the service layer.
+     *
      * @param patientRepository the repository instance to use
      * // TODO: Decide if this constructor should be used exclusively for testing or extended to support dependency injection in production.
      */
     public PatientService(IPatientRepository patientRepository) {
         this.patientRepository = patientRepository;
     }
+
     /**
      * Adds a new patient to the repository.
+     *
      * @param patient the patient object to add
      * @return true if the patient was successfully added, false otherwise
      */
@@ -41,8 +45,10 @@ public class PatientService implements IPatientService {
             return false;
         }
     }
+
     /**
      * Finds a patient by their PESEL (unique identifier).
+     *
      * @param pesel the PESEL of the patient to find
      * @return the found patient, or null if no patient was found
      */
@@ -50,8 +56,19 @@ public class PatientService implements IPatientService {
     public Patient findPatientByPesel(String pesel) {
         return patientRepository.findByPesel(pesel).orElse(null);
     }
+
+    /**
+     * Finds a patient by their FirstName
+     * todo: remove after testing
+     */
+    @Override
+    public List<Patient> findPatientByFirstName(String firstName) { // For test purposes
+        return patientRepository.findPatientsByFirstName(firstName).orElse(null);
+    }
+
     /**
      * Finds patients by their last name.
+     *
      * @param lastName the last name to search for
      * @return a list of matching patients, or null if none are found
      */
@@ -59,9 +76,11 @@ public class PatientService implements IPatientService {
     public List<Patient> findPatientByLastName(String lastName) {
         return patientRepository.findPatientsByLastName(lastName).orElse(null);
     }
+
     /**
      * Prints detailed information about a given patient.
      * Uses the patient's PESEL to fetch their full details from the repository.
+     *
      * @param patient the patient whose information should be printed
      */
     public void printPatientInfo(Patient patient) {
@@ -74,17 +93,21 @@ public class PatientService implements IPatientService {
         System.out.println("Phone Number " + found.getPhoneNumber());
         System.out.println("Email " + found.getEmail());
     }
+
     /**
      * Retrieves all patients stored in the repository.
+     *
      * @return a list of all patients
      */
     @Override
     public List<Patient> getAllPatients() {
         return patientRepository.findAll();
     }
+
     /**
      * Updates the data of an existing patient identified by their PESEL.
-     * @param pesel the PESEL of the patient to update
+     *
+     * @param pesel          the PESEL of the patient to update
      * @param updatedPatient the updated patient data
      * @return true if the update was successful, false otherwise
      */
@@ -92,8 +115,10 @@ public class PatientService implements IPatientService {
     public boolean updatePatient(String pesel, Patient updatedPatient) {
         return patientRepository.updateByPesel(pesel, updatedPatient);
     }
+
     /**
      * Deletes a patient identified by their PESEL.
+     *
      * @param pesel the PESEL of the patient to delete
      * @return true if the deletion was successful, false otherwise
      */

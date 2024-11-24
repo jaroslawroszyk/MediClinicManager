@@ -10,6 +10,7 @@ import java.time.LocalDate;
 public interface LocalDateProvider {
     /**
      * Retrieves the current date.
+     *
      * @return the current LocalDate
      */
     LocalDate getCurrentDate();
