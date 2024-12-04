@@ -1,20 +1,47 @@
 package pl.clinicmanager;
 
-import pl.clinicmanager.model.BirthDate;
-import pl.clinicmanager.model.Doctor;
-import pl.clinicmanager.model.Patient;
-import pl.clinicmanager.model.DoctorSpecialty;
+import pl.clinicmanager.model.*;
 import pl.clinicmanager.repository.DoctorRepository;
+import pl.clinicmanager.repository.DoctorScheduleRepository;
 import pl.clinicmanager.repository.PatientRepository;
+import pl.clinicmanager.service.DoctorScheduleService;
 import pl.clinicmanager.service.DoctorService;
 import pl.clinicmanager.service.PatientService;
 
+import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
 public class Main {
     public static void main(String[] args) {
+        test_grafik();
+    }
+
+    public static void test_grafik() // grafik 4.1/4.2
+    {
+        DoctorRepository doctorRepository = new DoctorRepository();
+        DoctorScheduleRepository scheduleRepository = new DoctorScheduleRepository();
+        DoctorScheduleService scheduleService = new DoctorScheduleService(scheduleRepository, doctorRepository);
+
+        // Przypadek 1: Tworzenie grafiku dla istniejącego lekarza
+        doctorRepository.save(new Doctor(1, "Jan", "Kowalski", "123456789", "jan.kowalski@example.com", "Address", null));
+        scheduleService.createSchedule(1, LocalDateTime.of(2024, 11, 25, 9, 0), LocalDateTime.of(2024, 11, 25, 17, 0));
+
+        List<DoctorSchedule> nextWeekSchedules = scheduleService.getSchedulesForNextWeek(1, LocalDate.of(2024, 11, 25));
+        nextWeekSchedules.forEach(System.out::println);
+
+        // Przypadek 2: Próba stworzenia grafiku dla nieistniejącego lekarza
+        try {
+            scheduleService.createSchedule(2, LocalDateTime.of(2024, 11, 26, 10, 0), LocalDateTime.of(2024, 11, 26, 14, 0));
+        } catch (IllegalArgumentException e) {
+            System.out.println("Error: " + e.getMessage());
+        }
+    }
+
+    public void test_doctor() // zad 3
+    {
         DoctorRepository doctorRepository = new DoctorRepository();
         DoctorService doctorService = new DoctorService(doctorRepository);
 

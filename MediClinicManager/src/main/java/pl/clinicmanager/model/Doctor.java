@@ -1,5 +1,6 @@
 package pl.clinicmanager.model;
 
+import java.util.HashSet;
 import java.util.Set;
 //import pl.clinicmanager.model.DoctorSpecialty;
 
@@ -20,6 +21,10 @@ public class Doctor {
         this.email = email;
         this.address = address;
         this.specialties = specialties;
+    }
+
+    public Doctor() {
+        this.specialties = new HashSet<>();
     }
 
     // Gettery i Settery
@@ -85,7 +90,6 @@ public class Doctor {
 }
 
 /*
-
 public record PersonalInfo(String peselNumber,
                            String firstName,
                            String lastName,

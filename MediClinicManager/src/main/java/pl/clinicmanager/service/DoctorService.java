@@ -15,7 +15,6 @@ public class DoctorService {
         this.doctorRepository = doctorRepository;
     }
 
-    // Tworzenie profilu lekarza z pełnymi danymi
     // TODO: refactor it to save whole doctor :)
     public Doctor createDoctorProfile(int id, String firstName, String lastName, String phoneNumber, String email, String address, Set<DoctorSpecialty> specialties) {
         Doctor doctor = new Doctor(id, firstName, lastName, phoneNumber, email, address, specialties);
@@ -26,8 +25,7 @@ public class DoctorService {
         return doctorRepository.save(doctor);
     }
 
-
-    // Dodanie specjalizacji do istniejącego lekarza
+    // TODO: add functiion to add specliaty to doctor by first/last name
     public Doctor addSpecialtyToDoctor(int id, DoctorSpecialty specialty) {
         Optional<Doctor> doctorOpt = doctorRepository.findById(id);
         if (doctorOpt.isPresent()) {
