@@ -1,5 +1,6 @@
 package pl.clinicmanager.model;
 
+import javax.print.Doc;
 import java.util.HashSet;
 import java.util.Set;
 //import pl.clinicmanager.model.DoctorSpecialty;
@@ -23,11 +24,16 @@ public class Doctor {
         this.specialties = specialties;
     }
 
+    public Doctor(int id, String firstName, String LastName) { // todo: for test purposes
+        this.id = id;
+        this.firstName = firstName;
+        this.lastName = LastName;
+    }
+
     public Doctor() {
         this.specialties = new HashSet<>();
     }
 
-    // Gettery i Settery
     public int getId() {
         return id;
     }
