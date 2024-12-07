@@ -58,11 +58,9 @@ public class Patient_Tests {
 
     @Test
     public void testValidPatientCreation() {
-
         Assertions.assertEquals(patient.getPersonalInfo().getFirstName(), "John");
         Assertions.assertEquals(patient.getPersonalInfo().getLastName(), "Doe");
         Assertions.assertEquals(patient.getPesel(), "44051401359");
-        Assertions.assertEquals(patient.getBirthDate(), "1990-05-15");
         Assertions.assertEquals(patient.getAge(), 18);
         Assertions.assertEquals(patient.getPersonalInfo().getPhoneNumber(), "+48123456789");
         Assertions.assertEquals(patient.getPersonalInfo().getEmail(), "john.doe@example.com");

@@ -1,13 +1,14 @@
 package pl.clinicmanager.repository;
 
 import pl.clinicmanager.model.DoctorSchedule;
+import pl.clinicmanager.model.IDoctorScheduleRepository;
 
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
-public class DoctorScheduleRepository {
+public class DoctorScheduleRepository implements IDoctorScheduleRepository {
     private List<DoctorSchedule> schedules = new ArrayList<>();
 
     public void save(DoctorSchedule schedule) {

@@ -4,6 +4,7 @@ import pl.clinicmanager.model.Doctor;
 import pl.clinicmanager.model.DoctorSpecialty;
 import pl.clinicmanager.model.IDoctorRepository;
 
+import java.util.HashSet;
 import java.util.Optional;
 import java.util.Set;
 
@@ -19,12 +20,13 @@ public class DoctorService {
         return doctorRepository.save(doctor);
     }
 
-    // TODO: add functiion to add specliaty to doctor by first/last name
     public Doctor addSpecialtyToDoctor(int id, DoctorSpecialty specialty) {
         Optional<Doctor> doctorOpt = doctorRepository.findById(id);
         if (doctorOpt.isPresent()) {
             Doctor doctor = doctorOpt.get();
-            doctor.getSpecialties().add(specialty);
+            Set<DoctorSpecialty> specialties = new HashSet<>(doctor.getSpecialties());
+            specialties.add(specialty);
+            doctor.setSpecialties(specialties);
             return doctorRepository.save(doctor);
         } else {
             throw new IllegalArgumentException("Doctor not found");
