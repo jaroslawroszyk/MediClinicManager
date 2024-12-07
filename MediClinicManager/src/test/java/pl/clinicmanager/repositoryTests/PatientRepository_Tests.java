@@ -3,7 +3,9 @@ package pl.clinicmanager.repositoryTests;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import pl.clinicmanager.model.BirthDate;
 import pl.clinicmanager.model.Patient;
+import pl.clinicmanager.model.PersonalInfo;
 import pl.clinicmanager.repository.PatientRepository;
 
 import java.util.Optional;
@@ -16,8 +18,8 @@ public class PatientRepository_Tests {
     @BeforeEach
     public void setUp() {
         repository = new PatientRepository();
-        patient1 = new Patient("John", "Doe", "44051401359", null, 30, "123456789", "john@example.com");
-        patient2 = new Patient("Jane", "Smith", "44051401359", null, 25, "123456789", "jane@example.com");
+        patient1 = new Patient(new PersonalInfo("John", "Doe", "+48123456789", "john.doe@example.com", "Wroclaw"), "44051401359", new BirthDate("1990-05-15"), 18);
+        patient2 = new Patient(new PersonalInfo("Jane", "Smith", "+48123456789", "john.doe@example.com", "Wroclaw"), "44051401359", new BirthDate("1990-05-15"), 18);
         repository.save(patient1);
         repository.save(patient2);
     }
@@ -38,10 +40,10 @@ public class PatientRepository_Tests {
 
     @Test
     public void testUpdateByPesel() {
-        Patient updatedPatient = new Patient("John", "Doe", "44051401359", null, 31, "123456789", "john.new@example.com");
+        Patient updatedPatient = new Patient(new PersonalInfo("John", "Doe", "+48123456789", "john.doe@example.com", "Wroclaw"), "44051401359", new BirthDate("1990-05-15"), 18);
         boolean updated = repository.updateByPesel("44051401359", updatedPatient);
         Assertions.assertTrue(updated);
-        Assertions.assertEquals("123456789", repository.findByPesel("44051401359").get().getPhoneNumber());
+        Assertions.assertEquals("+48123456789", repository.findByPesel("44051401359").get().getPersonalInfo().getPhoneNumber());
     }
 
     @Test

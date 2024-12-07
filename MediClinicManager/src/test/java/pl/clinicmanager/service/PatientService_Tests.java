@@ -2,8 +2,10 @@ package pl.clinicmanager.service;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import pl.clinicmanager.model.BirthDate;
 import pl.clinicmanager.model.Patient;
 import pl.clinicmanager.model.IPatientRepository;
+import pl.clinicmanager.model.PersonalInfo;
 
 import java.util.Arrays;
 import java.util.List;
@@ -15,16 +17,18 @@ import static org.mockito.Mockito.*;
 class PatientService_Tests {
     private PatientService patientService;
     private IPatientRepository patientRepository;
+    private  Patient patient;
 
     @BeforeEach
     void setUp() {
         patientRepository = mock(IPatientRepository.class);
         patientService = new PatientService(patientRepository);
+        patient = new Patient(new PersonalInfo("John", "Doe", "+48123456789", "john.doe@example.com", "Wroclaw"), "44051401359", new BirthDate("1990-05-15"), 18);
+
     }
 
     @Test
     void addPatient_ShouldReturnTrue_WhenSaveSuccessful() {
-        Patient patient = new Patient("John", "Doe", "44051401359", null, 30, "123456789", "john@example.com");
         doNothing().when(patientRepository).save(patient);
 
         boolean result = patientService.addPatient(patient);
@@ -35,7 +39,7 @@ class PatientService_Tests {
 
     @Test
     void addPatient_ShouldReturnFalse_WhenSaveFails() {
-        Patient patient = new Patient("John", "Doe", "44051401359", null, 30, "123456789", "john@example.com");
+
         doThrow(new RuntimeException("Save failed")).when(patientRepository).save(patient);
 
         boolean result = patientService.addPatient(patient);
@@ -46,14 +50,12 @@ class PatientService_Tests {
 
     @Test
     void findPatientByPesel_ShouldReturnPatient_WhenPatientExists() {
-        Patient patient = new Patient("John", "Doe", "44051401359", null, 30, "123456789", "john@example.com");
-
         when(patientRepository.findByPesel("12345678901")).thenReturn(Optional.of(patient));
 
         Patient result = patientService.findPatientByPesel("12345678901");
 
         assertNotNull(result);
-        assertEquals("John", result.getFirstName());
+        assertEquals("John", result.getPersonalInfo().getFirstName());
         verify(patientRepository, times(1)).findByPesel("12345678901");
     }
 
@@ -69,8 +71,8 @@ class PatientService_Tests {
 
     @Test
     void findPatientByLastName_ShouldReturnListOfPatients_WhenPatientsExist() {
-        Patient patient1 = new Patient("John", "Doe", "44051401359", null, 30, "123456789", "john@example.com");
-        Patient patient2 = new Patient("Jane", "Doe", "66022365628", null, 30, "987654321", "jane@example.com");
+        Patient patient1 = new Patient(new PersonalInfo("John", "Doe", "+48123456789", "john.doe@example.com", "Wroclaw"), "44051401359", new BirthDate("1990-05-15"), 18);
+        Patient patient2 = new Patient(new PersonalInfo("Jane", "Doe", "+48123456789", "john.doe@example.com", "Wroclaw"), "66022365628", new BirthDate("1990-05-15"), 18);
 
         List<Patient> patients = Arrays.asList(patient1, patient2);
         when(patientRepository.findPatientsByLastName("Doe")).thenReturn(Optional.of(patients));
@@ -94,8 +96,9 @@ class PatientService_Tests {
 
     @Test
     void getAllPatients_ShouldReturnListOfAllPatients() {
-        Patient patient1 = new Patient("John", "Doe", "44051401359", null, 30, "123456789", "john@example.com");
-        Patient patient2 = new Patient("Jane", "Doe", "66022365628", null, 30, "987654321", "jane@example.com");
+        Patient patient1 = new Patient(new PersonalInfo("John", "Doe", "+48123456789", "john.doe@example.com", "Wroclaw"), "44051401359", new BirthDate("1990-05-15"), 18);
+        Patient patient2 = new Patient(new PersonalInfo("Jane", "Doe", "+48123456789", "john.doe@example.com", "Wroclaw"), "66022365628", new BirthDate("1990-05-15"), 18);
+
 
         List<Patient> patients = Arrays.asList(patient1, patient2);
         when(patientRepository.findAll()).thenReturn(patients);
@@ -109,7 +112,7 @@ class PatientService_Tests {
 
     @Test
     void updatePatient_ShouldReturnTrue_WhenUpdateSuccessful() {
-        Patient updatedPatient = new Patient("John", "Doe", "44051401359", null, 30, "123456789", "john@example.com");
+        Patient updatedPatient = new Patient(new PersonalInfo("John", "Doe", "+48123456789", "john.doe@example.com", "Wroclaw"), "44051401359", new BirthDate("1990-05-15"), 18);
 
         when(patientRepository.updateByPesel("12345678901", updatedPatient)).thenReturn(true);
 
@@ -121,7 +124,7 @@ class PatientService_Tests {
 
     @Test
     void updatePatient_ShouldReturnFalse_WhenUpdateFails() {
-        Patient updatedPatient = new Patient("John", "Doe", "44051401359", null, 30, "123456789", "john@example.com");
+        Patient updatedPatient = new Patient(new PersonalInfo("John", "Doe", "+48123456789", "john.doe@example.com", "Wroclaw"), "44051401359", new BirthDate("1990-05-15"), 18);
 
         when(patientRepository.updateByPesel("12345678901", updatedPatient)).thenReturn(false);
 
