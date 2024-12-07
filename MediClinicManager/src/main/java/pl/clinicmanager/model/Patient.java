@@ -9,9 +9,7 @@ public class Patient {
     private BirthDate birthDate;
     private int age;
 
-
     public Patient() {
-
     }
 
     public Patient(PersonalInfo personalInfo, String pesel, BirthDate birthDate, int age) {

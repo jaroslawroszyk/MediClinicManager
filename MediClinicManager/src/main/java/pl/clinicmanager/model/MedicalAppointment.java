@@ -15,7 +15,6 @@ public class MedicalAppointment {
         this.startTime = startTime;
     }
 
-    // Gettery i settery
     public int getAppointmentId() { return appointmentId; }
     public int getDoctorId() { return doctorId; }
     public int getPatientId() { return patientId; }

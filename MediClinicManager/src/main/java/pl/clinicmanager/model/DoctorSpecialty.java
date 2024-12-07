@@ -1,6 +1,5 @@
 package pl.clinicmanager.model;
 
-
 public enum DoctorSpecialty {
     CARDIOLOGY,
     NEUROLOGY,

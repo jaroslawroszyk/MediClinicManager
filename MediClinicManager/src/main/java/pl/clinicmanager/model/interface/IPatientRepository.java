@@ -1,7 +1,5 @@
 package pl.clinicmanager.model;
 
-import pl.clinicmanager.model.Patient;
-
 import java.util.List;
 import java.util.Optional;
 
