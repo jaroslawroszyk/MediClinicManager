@@ -4,6 +4,7 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import pl.clinicmanager.model.Doctor;
 import pl.clinicmanager.model.DoctorSpecialty;
+import pl.clinicmanager.model.PersonalInfo;
 import pl.clinicmanager.repository.DoctorRepository;
 import pl.clinicmanager.model.IDoctorRepository;
 
@@ -29,18 +30,17 @@ class DoctorService_Tests {
         specialties.add(DoctorSpecialty.CARDIOLOGY);
         specialties.add(DoctorSpecialty.NEUROLOGY);
 
-        Doctor doctor = new Doctor(1, "John", "Doe", "123456789", "john.doe@example.com", "Some Address", specialties);
+        Doctor doctor = new Doctor(1, new PersonalInfo("John", "Doe", "123456789", "john.doe@example.com", "Some Address"), specialties);
         doctorRepository.save(doctor);
-
-        Doctor createdDoctor = doctorService.createDoctorProfile(1, "John", "Doe", "123456789", "john.doe@example.com", "Some Address", specialties);
+        Doctor createdDoctor = doctorService.createDoctor(doctor);
 
         assertNotNull(createdDoctor);
         assertEquals(1, createdDoctor.getId());
-        assertEquals("John", createdDoctor.getFirstName());
-        assertEquals("Doe", createdDoctor.getLastName());
-        assertEquals("123456789", createdDoctor.getPhoneNumber());
-        assertEquals("john.doe@example.com", createdDoctor.getEmail());
-        assertEquals("Some Address", createdDoctor.getAddress());
+        assertEquals("John", createdDoctor.getPersonalInfo().getFirstName());
+        assertEquals("Doe", createdDoctor.getPersonalInfo().getLastName());
+        assertEquals("123456789", createdDoctor.getPersonalInfo().getPhoneNumber());
+        assertEquals("john.doe@example.com", createdDoctor.getPersonalInfo().getEmail());
+        assertEquals("Some Address", createdDoctor.getPersonalInfo().getAddress());
         assertTrue(createdDoctor.getSpecialties().contains(DoctorSpecialty.CARDIOLOGY));
         assertTrue(createdDoctor.getSpecialties().contains(DoctorSpecialty.NEUROLOGY));
     }
@@ -50,7 +50,7 @@ class DoctorService_Tests {
         Set<DoctorSpecialty> specialties = new HashSet<>();
         specialties.add(DoctorSpecialty.CARDIOLOGY);
 
-        Doctor doctor = new Doctor(1, "John", "Doe", "123456789", "john.doe@example.com", "Some Address", specialties);
+        Doctor doctor = new Doctor(1, new PersonalInfo("John", "Doe", "123456789", "john.doe@example.com", "Some Address"), specialties);
         doctorRepository.save(doctor);
 
         Doctor updatedDoctor = doctorService.addSpecialtyToDoctor(1, DoctorSpecialty.ORTHOPEDICS);
@@ -64,14 +64,14 @@ class DoctorService_Tests {
         Set<DoctorSpecialty> specialties = new HashSet<>();
         specialties.add(DoctorSpecialty.CARDIOLOGY);
 
-        Doctor doctor = new Doctor(1, "John", "Doe", "123456789", "john.doe@example.com", "Some Address", specialties);
+        Doctor doctor = new Doctor(1, new PersonalInfo("John", "Doe", "123456789", "john.doe@example.com", "Some Address"), specialties);
         doctorRepository.save(doctor);
 
         Optional<Doctor> foundDoctor = doctorService.findDoctorById(1);
 
         assertTrue(foundDoctor.isPresent());
         assertEquals(1, foundDoctor.get().getId());
-        assertEquals("John", foundDoctor.get().getFirstName());
+        assertEquals("John", foundDoctor.get().getPersonalInfo().getFirstName());
         assertTrue(foundDoctor.get().getSpecialties().contains(DoctorSpecialty.CARDIOLOGY));
     }
 
@@ -79,11 +79,11 @@ class DoctorService_Tests {
     void findDoctorsBySpecialty() {
         Set<DoctorSpecialty> specialties1 = new HashSet<>();
         specialties1.add(DoctorSpecialty.CARDIOLOGY);
-        Doctor doctor1 = new Doctor(1, "John", "Doe", "123456789", "john.doe@example.com", "Some Address", specialties1);
+        Doctor doctor1 = new Doctor(1, new PersonalInfo("John", "Doe", "123456789", "john.doe@example.com", "Some Address"), specialties1);
 
         Set<DoctorSpecialty> specialties2 = new HashSet<>();
         specialties2.add(DoctorSpecialty.CARDIOLOGY);
-        Doctor doctor2 = new Doctor(2, "Jane", "Smith", "987654321", "jane.smith@example.com", "Another Address", specialties2);
+        Doctor doctor2 = new Doctor(2, new PersonalInfo("Jane", "Smith", "987654321", "jane.smith@example.com", "Another Address"), specialties2);
 
         doctorRepository.save(doctor1);
         doctorRepository.save(doctor2);

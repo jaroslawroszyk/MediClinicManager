@@ -85,13 +85,13 @@ public class PatientService implements IPatientService {
      */
     public void printPatientInfo(Patient patient) {
         Patient found = findPatientByPesel(patient.getPesel());
-        System.out.println("First Name: " + found.getFirstName());
-        System.out.println("Last Name: " + found.getLastName());
+        System.out.println("First Name: " + found.getPersonalInfo().getFirstName());
+        System.out.println("Last Name: " + found.getPersonalInfo().getLastName());
         System.out.println("Pesel: " + found.getPesel());
         System.out.println("Birth data: " + found.getBirthDate());
         System.out.println("Age " + found.getAge());
-        System.out.println("Phone Number " + found.getPhoneNumber());
-        System.out.println("Email " + found.getEmail());
+        System.out.println("Phone Number " + found.getPersonalInfo().getPhoneNumber());
+        System.out.println("Email " + found.getPersonalInfo().getEmail());
     }
 
     /**

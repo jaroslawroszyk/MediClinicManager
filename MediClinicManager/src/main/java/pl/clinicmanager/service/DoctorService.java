@@ -15,12 +15,6 @@ public class DoctorService {
         this.doctorRepository = doctorRepository;
     }
 
-    // TODO: refactor it to save whole doctor :)
-    public Doctor createDoctorProfile(int id, String firstName, String lastName, String phoneNumber, String email, String address, Set<DoctorSpecialty> specialties) {
-        Doctor doctor = new Doctor(id, firstName, lastName, phoneNumber, email, address, specialties);
-        return doctorRepository.save(doctor);
-    }
-
     public Doctor createDoctor(Doctor doctor) {
         return doctorRepository.save(doctor);
     }

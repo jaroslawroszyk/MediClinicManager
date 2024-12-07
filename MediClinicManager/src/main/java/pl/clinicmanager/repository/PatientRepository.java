@@ -63,14 +63,14 @@ public class PatientRepository implements IPatientRepository {
     @Override
     public Optional<List<Patient>> findPatientsByLastName(String lastName) {
         return Optional.of(patientList.stream()
-                .filter(p -> p.getLastName().equalsIgnoreCase(lastName))
+                .filter(p -> p.getPersonalInfo().getLastName().equalsIgnoreCase(lastName))
                 .toList());
     }
 
     @Override
     public Optional<List<Patient>> findPatientsByFirstName(String firstName) {
         return Optional.of(patientList.stream()
-                .filter(p -> p.getFirstName().equalsIgnoreCase(firstName))
+                .filter(p -> p.getPersonalInfo().getFirstName().equalsIgnoreCase(firstName))
                 .toList());
     }
 
