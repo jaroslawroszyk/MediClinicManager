@@ -45,32 +45,14 @@ public class Doctor {
     public void addSpecialty(DoctorSpecialty specialty) {
         specialties.add(specialty);
     }
+
+    public void printPersonalInfo() {
+        System.out.println("id: " + id);
+        System.out.println("Name: " + personalInfo.getFirstName());
+        System.out.println("Surname: " + personalInfo.getLastName());
+        System.out.println("phoneNumber: " + personalInfo.getPhoneNumber());
+        System.out.println("email: " + personalInfo.getEmail());
+        System.out.println("address: " + personalInfo.getAddress());
+        System.out.println("specialties: " + specialties);
+    }
 }
-
-/*
-public record PersonalInfo(String peselNumber,
-                           String firstName,
-                           String lastName,
-                           LocalDate dateOfBirth,
-                           String phoneNumber,
-                           String email) {}
-
- */
-/*
-
-TODO: Kolejne wymagane - czyli musze zrobic wspolna strukture zeby kod byl czytelny
-TODO: + ta struktura moze korzystac z validatora (wszystko pieknie sie zgrywa xD)
-Dane pacjentów potrzebne do świadczenia usług medycznych to:
-
-imię,
-nazwisko,
-nr PESEL,
-data urodzenia,
-wiek,
-telefon kontaktowy,
-adres mailowy.
-
-Dane lekarzy wymagane na potrzeby pracy placówki medycznej to:
-
-wszystkie dane osobowe i kontaktowe (tak samo jak u pacjentów),
- */

@@ -2,6 +2,8 @@ package pl.clinicmanager.service;
 
 import pl.clinicmanager.model.DoctorSchedule;
 
+import pl.clinicmanager.model.IDoctorRepository;
+import pl.clinicmanager.model.IDoctorScheduleRepository;
 import pl.clinicmanager.repository.DoctorRepository;
 import pl.clinicmanager.repository.DoctorScheduleRepository;
 
@@ -10,10 +12,10 @@ import java.time.LocalDateTime;
 import java.util.List;
 
 public class DoctorScheduleService {
-    private final DoctorScheduleRepository scheduleRepository;
-    private final DoctorRepository doctorRepository;
+    private final IDoctorScheduleRepository scheduleRepository;
+    private final IDoctorRepository doctorRepository;
 
-    public DoctorScheduleService(DoctorScheduleRepository scheduleRepository, DoctorRepository doctorRepository) {
+    public DoctorScheduleService(IDoctorScheduleRepository scheduleRepository, IDoctorRepository doctorRepository) {
         this.scheduleRepository = scheduleRepository;
         this.doctorRepository = doctorRepository;
     }
@@ -29,9 +31,22 @@ public class DoctorScheduleService {
         scheduleRepository.save(schedule);
     }
 
-    public List<DoctorSchedule> getSchedulesForNextWeek(int doctorId, LocalDate weekStart) {
+    public void createSchedule2(int doctorId, DoctorSchedule schedule) {
         checkDoctorExist(doctorId);
 
+        if (schedule.getEndTime().isBefore(schedule.getStartTime())) {
+            throw new IllegalArgumentException("End time must be after start time.");
+        }
+
+//        DoctorSchedule schedule = new DoctorSchedule(doctorIdId, startTime, endTime);
+        scheduleRepository.save(schedule);
+    }
+
+    public List<DoctorSchedule> getSchedulesForNextWeek(int doctorId, LocalDate weekStart) {
+        checkDoctorExist(doctorId);
+//        if (weekStart == null || weekStart.isBefore(LocalDate.now())) {
+//            throw new IllegalArgumentException("Week start date must be today or in the future.");
+//        }
         return scheduleRepository.findSchedulesByDoctorIdAndWeek(doctorId, weekStart);
     }
 
