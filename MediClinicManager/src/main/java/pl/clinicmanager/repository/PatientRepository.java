@@ -49,7 +49,7 @@ public class PatientRepository implements IPatientRepository {
     public Optional<Patient> findByPesel(String pesel) {
         return patientList.stream()
                 .filter(patient -> patient.getPesel().equals(pesel))
-                .findFirst(); // TODO: what if we dont find?
+                .findFirst();
     }
 
     /**
@@ -92,10 +92,9 @@ public class PatientRepository implements IPatientRepository {
      * @param pesel          the PESEL of the patient to update
      * @param updatedPatient the updated patient object
      * @return true if the update was successful, false if no matching patient was found
-     * // TODO: Evaluate if merging data instead of replacing is a better approach.
      */
     @Override
-    public boolean updateByPesel(String pesel, Patient updatedPatient) { // TODO: think about it
+    public boolean updateByPesel(String pesel, Patient updatedPatient) {
         for (int i = 0; i < patientList.size(); i++) {
             if (patientList.get(i).getPesel().equals(pesel)) {
                 patientList.set(i, updatedPatient);

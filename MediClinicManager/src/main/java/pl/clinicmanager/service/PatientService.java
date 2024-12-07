@@ -15,16 +15,15 @@ import java.util.List;
 public class PatientService implements IPatientService {
     private IPatientRepository patientRepository;
 
-//    public PatientService() {
-//        this.patientRepository = new PatientRepository();
-//    }
+    public PatientService() {
+        this.patientRepository = new PatientRepository();
+    }
 
     /**
      * Constructor for injecting a custom implementation of IPatientRepository.
      * This is useful for testing or switching repository implementations without modifying the service layer.
      *
      * @param patientRepository the repository instance to use
-     * // TODO: Decide if this constructor should be used exclusively for testing or extended to support dependency injection in production.
      */
     public PatientService(IPatientRepository patientRepository) {
         this.patientRepository = patientRepository;
@@ -59,7 +58,6 @@ public class PatientService implements IPatientService {
 
     /**
      * Finds a patient by their FirstName
-     * todo: remove after testing
      */
     @Override
     public List<Patient> findPatientByFirstName(String firstName) { // For test purposes

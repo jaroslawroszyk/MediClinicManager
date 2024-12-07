@@ -82,7 +82,6 @@ public class ReqPatientTest {
     @Test
     void receptionistFindByFirstNameAllMatchingPatients() { // 1.3.1 - delete it later
         /*
-        TODO:
         for testing purposes delete it leter
          */
         Patient patient1 =

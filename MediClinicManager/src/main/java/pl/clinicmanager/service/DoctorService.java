@@ -8,7 +8,6 @@ import java.util.HashSet;
 import java.util.Optional;
 import java.util.Set;
 
-// TODO: create interface
 public class DoctorService {
     private IDoctorRepository doctorRepository;
 
