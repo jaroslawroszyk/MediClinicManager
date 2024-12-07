@@ -71,7 +71,7 @@
 
 The application's class diagram is located in the `docs` folder and illustrates the relationships between classes, their attributes, and dependencies. The diagram was created using **Excalidraw**.
 
-![Class Diagram](link_to_diagram)
+![Class Diagram](https://github.com/jaroslawroszyk/MediClinicManager/blob/main/Documents/class_diagram.png?raw=true)
 
 ## Authors
 
