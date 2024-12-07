@@ -3,6 +3,14 @@ interface LocalDateProvider {
     +LocalDate getCurrentDate()
 }
 
+class PersonalInfo {
+ -String firstName
+ -String lastName
+ -String phoneNumber
+ -String email
+ -String address
+} 
+
 class BirthDate {
     -LocalDate birthDate
     -LocalDateProvider dateProvider
@@ -15,11 +23,7 @@ class BirthDate {
 
 class Doctor {
     -int id
-    -String firstName
-    -String lastName
-    -String phoneNumber
-    -String email
-    -String address
+    -PersonalInfo personalInfo
     -Set<DoctorSpecialty> specialties
     +void addSpecialty(DoctorSpecialty)
 }
@@ -38,13 +42,10 @@ class MedicalAppointment {
 }
 
 class Patient {
-    -String firstName
-    -String lastName
+    -PersonalInfo personalInfo
     -String pesel
     -BirthDate birthDate
     -int age
-    -String phoneNumber
-    -String email
 }
 
 class Validator {
@@ -123,6 +124,9 @@ MedicalAppointment --> Patient : references
 
 DoctorRepository ..|> IDoctorRepository
 PatientRepository ..|> IPatientRepository
+
+PersonalInfo "1..1" --> Doctor
+PersonalInfo "1..1" --> Patient
 
 DoctorRepository *-- Doctor
 DoctorScheduleRepository *-- DoctorSchedule
