@@ -8,7 +8,7 @@ public class DoctorSchedule {
     private LocalDateTime endTime;
 
     public DoctorSchedule(int doctorId, LocalDateTime startTime, LocalDateTime endTime) {
-        this.doctorId = doctorId;
+        this.doctorId = doctorId; // what if doctor doesont exit?
         this.startTime = startTime;
         this.endTime = endTime;
     }
