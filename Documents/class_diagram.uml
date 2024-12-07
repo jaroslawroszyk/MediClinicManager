@@ -1,0 +1,131 @@
+@startuml
+interface LocalDateProvider {
+    +LocalDate getCurrentDate()
+}
+
+class BirthDate {
+    -LocalDate birthDate
+    -LocalDateProvider dateProvider
+    +BirthDate(String birthDateString)
+    +BirthDate(String birthDateString, LocalDateProvider dateProvider)
+    +int calculateAge()
+    +String getFormattedDate()
+    -LocalDate validateAndParse(String birthDateString)
+}
+
+class Doctor {
+    -int id
+    -String firstName
+    -String lastName
+    -String phoneNumber
+    -String email
+    -String address
+    -Set<DoctorSpecialty> specialties
+    +void addSpecialty(DoctorSpecialty)
+}
+
+class DoctorSchedule {
+    -int doctorId
+    -LocalDateTime startTime
+    -LocalDateTime endTime
+}
+
+class MedicalAppointment {
+    -int appointmentId
+    -int doctorId
+    -int patientId
+    -LocalDateTime startTime
+}
+
+class Patient {
+    -String firstName
+    -String lastName
+    -String pesel
+    -BirthDate birthDate
+    -int age
+    -String phoneNumber
+    -String email
+}
+
+class Validator {
+    +static boolean isValidPesel(String pesel)
+    +static boolean isValidEmail(String email)
+    +static boolean isValidPhoneNumber(String phoneNumber)
+}
+
+enum DoctorSpecialty {
+    CARDIOLOGY
+    NEUROLOGY
+    ORTHOPEDICS
+    PEDIATRICS
+    ONCOLOGY
+    DERMATOLOGY
+    GASTROENTEROLOGY
+    PSYCHIATRY
+    OBSTETRICS_GYNECOLOGY
+    OPHTHALMOLOGY
+    RADIOLOGY
+}
+
+    class DoctorRepository {
+        - Map<Integer, Doctor> doctorMap
+        + Doctor save(Doctor doctor)
+        + Optional<Doctor> findById(int id)
+        + Set<Doctor> findBySpecialty(DoctorSpecialty specialty)
+    }
+
+    class DoctorScheduleRepository {
+        - List<DoctorSchedule> schedules
+        + void save(DoctorSchedule schedule)
+        + List<DoctorSchedule> findSchedulesByDoctorIdAndWeek(int doctorId, LocalDate weekStart)
+    }
+
+    class MedicalAppointmentRepository {
+        - List<MedicalAppointment> appointments
+        + void save(MedicalAppointment appointment)
+        + List<MedicalAppointment> findByDoctorIdAndTime(int doctorId, LocalDateTime startTime)
+    }
+
+    class PatientRepository {
+        - List<Patient> patientList
+        + void save(Patient patient)
+        + List<Patient> findAll()
+        + Optional<Patient> findByPesel(String pesel)
+        + Optional<List<Patient>> findPatientsByLastName(String lastName)
+        + Optional<List<Patient>> findPatientsByFirstName(String firstName)
+        + boolean deleteByPesel(String pesel)
+        + boolean updateByPesel(String pesel, Patient updatedPatient)
+    }
+
+
+interface IDoctorRepository {
+    + Doctor save(Doctor doctor)
+    + Optional<Doctor> findById(int id)
+    + Set<Doctor> findBySpecialty(DoctorSpecialty specialty)
+}
+
+interface IPatientRepository {
+    + void save(Patient patient)
+    + List<Patient> findAll()
+    + Optional<Patient> findByPesel(String pesel)
+    + Optional<List<Patient>> findPatientsByLastName(String lastName)
+    + Optional<List<Patient>> findPatientsByFirstName(String firstName)
+    + boolean deleteByPesel(String pesel)
+    + boolean updateByPesel(String pesel, Patient updatedPatient)
+}
+
+BirthDate --|> LocalDateProvider
+Patient *-- BirthDate
+Doctor "0..*" --o DoctorSpecialty
+DoctorSchedule --> Doctor : references
+MedicalAppointment --> Doctor : references
+MedicalAppointment --> Patient : references
+
+DoctorRepository ..|> IDoctorRepository
+PatientRepository ..|> IPatientRepository
+
+DoctorRepository *-- Doctor
+DoctorScheduleRepository *-- DoctorSchedule
+MedicalAppointmentRepository *-- MedicalAppointment
+PatientRepository *-- Patient
+@enduml
