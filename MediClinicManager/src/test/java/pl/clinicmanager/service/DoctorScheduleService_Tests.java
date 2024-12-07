@@ -4,6 +4,7 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import pl.clinicmanager.model.Doctor;
 import pl.clinicmanager.model.DoctorSchedule;
+import pl.clinicmanager.model.PersonalInfo;
 import pl.clinicmanager.repository.DoctorRepository;
 import pl.clinicmanager.repository.DoctorScheduleRepository;
 
@@ -36,11 +37,12 @@ class DoctorScheduleService_Tests {
 
         Doctor doctor = new Doctor(
                 doctorId,
-                "Jan",
-                "Kowalski",
-                "123456789",
-                "jan.kowalski@example.com",
-                "ul. Przykładowa 1",
+                new PersonalInfo(
+                        "Jan",
+                        "Kowalski",
+                        "123456789",
+                        "jan.kowalski@example.com",
+                        "ul. Przykładowa 1"),
                 Set.of()
         );
 

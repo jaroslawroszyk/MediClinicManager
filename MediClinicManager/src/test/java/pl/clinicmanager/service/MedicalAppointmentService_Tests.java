@@ -5,6 +5,7 @@ import org.junit.jupiter.api.Test;
 import pl.clinicmanager.model.Doctor;
 import pl.clinicmanager.model.DoctorSchedule;
 import pl.clinicmanager.model.MedicalAppointment;
+import pl.clinicmanager.model.PersonalInfo;
 import pl.clinicmanager.repository.DoctorRepository;
 import pl.clinicmanager.repository.DoctorScheduleRepository;
 import pl.clinicmanager.repository.MedicalAppointmentRepository;
@@ -25,7 +26,8 @@ class MedicalAppointmentService_Tests {
         scheduleRepository = new DoctorScheduleRepository();
         appointmentRepository = new MedicalAppointmentRepository();
         appointmentService = new MedicalAppointmentService(doctorRepository, scheduleRepository, appointmentRepository);
-        doctorRepository.save(new Doctor(1, "John", "Doe"));
+        Doctor doctor = new Doctor(1, new PersonalInfo("John", "Doe"), null);
+        doctorRepository.save(doctor);
     }
 
     @Test

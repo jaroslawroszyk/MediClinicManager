@@ -1,33 +1,17 @@
 package pl.clinicmanager.model;
 
-import javax.print.Doc;
 import java.util.HashSet;
 import java.util.Set;
-//import pl.clinicmanager.model.DoctorSpecialty;
 
 public class Doctor {
     private int id;
-    private String firstName;
-    private String lastName;
-    private String phoneNumber;
-    private String email;
-    private String address;
+    private PersonalInfo personalInfo;
     private Set<DoctorSpecialty> specialties;
 
-    public Doctor(int id, String firstName, String lastName, String phoneNumber, String email, String address, Set<DoctorSpecialty> specialties) {
+    public Doctor(int id, PersonalInfo personalInfo, Set<DoctorSpecialty> specialties) {
         this.id = id;
-        this.firstName = firstName;
-        this.lastName = lastName;
-        this.phoneNumber = phoneNumber;
-        this.email = email;
-        this.address = address;
+        this.personalInfo = personalInfo;
         this.specialties = specialties;
-    }
-
-    public Doctor(int id, String firstName, String LastName) { // todo: for test purposes
-        this.id = id;
-        this.firstName = firstName;
-        this.lastName = LastName;
     }
 
     public Doctor() {
@@ -42,44 +26,12 @@ public class Doctor {
         this.id = id;
     }
 
-    public String getFirstName() {
-        return firstName;
+    public PersonalInfo getPersonalInfo() {
+        return personalInfo;
     }
 
-    public void setFirstName(String firstName) {
-        this.firstName = firstName;
-    }
-
-    public String getLastName() {
-        return lastName;
-    }
-
-    public void setLastName(String lastName) {
-        this.lastName = lastName;
-    }
-
-    public String getPhoneNumber() {
-        return phoneNumber;
-    }
-
-    public void setPhoneNumber(String phoneNumber) {
-        this.phoneNumber = phoneNumber;
-    }
-
-    public String getEmail() {
-        return email;
-    }
-
-    public void setEmail(String email) {
-        this.email = email;
-    }
-
-    public String getAddress() {
-        return address;
-    }
-
-    public void setAddress(String address) {
-        this.address = address;
+    public void setPersonalInfo(PersonalInfo personalInfo) {
+        this.personalInfo = personalInfo;
     }
 
     public Set<DoctorSpecialty> getSpecialties() {
