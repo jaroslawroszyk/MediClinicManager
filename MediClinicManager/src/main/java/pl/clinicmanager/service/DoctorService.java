@@ -32,12 +32,14 @@ public class DoctorService {
         }
     }
 
-    // Wyszukiwanie lekarza po ID
+    public void printAllDoctors() {
+        doctorRepository.printAllDoctors();
+    }
+
     public Optional<Doctor> findDoctorById(int id) {
         return doctorRepository.findById(id);
     }
 
-    // Wyszukiwanie wszystkich lekarzy o danej specjalizacji
     public Set<Doctor> findDoctorsBySpecialty(DoctorSpecialty specialty) {
         return doctorRepository.findBySpecialty(specialty);
     }

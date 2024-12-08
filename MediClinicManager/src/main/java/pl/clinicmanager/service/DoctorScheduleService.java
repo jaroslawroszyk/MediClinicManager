@@ -20,29 +20,17 @@ public class DoctorScheduleService {
         this.doctorRepository = doctorRepository;
     }
 
-    public void createSchedule(int doctorId, LocalDateTime startTime, LocalDateTime endTime) {
-        checkDoctorExist(doctorId);
-
-        if (endTime.isBefore(startTime)) {
-            throw new IllegalArgumentException("End time must be after start time.");
-        }
-
-        DoctorSchedule schedule = new DoctorSchedule(doctorId, startTime, endTime);
-        scheduleRepository.save(schedule);
-    }
-
-    public void createSchedule2(int doctorId, DoctorSchedule schedule) {
-        checkDoctorExist(doctorId);
+    public void createSchedule(DoctorSchedule schedule) {
+        checkDoctorExist(schedule.getDoctorId());
 
         if (schedule.getEndTime().isBefore(schedule.getStartTime())) {
             throw new IllegalArgumentException("End time must be after start time.");
         }
 
-//        DoctorSchedule schedule = new DoctorSchedule(doctorIdId, startTime, endTime);
         scheduleRepository.save(schedule);
     }
 
-    public List<DoctorSchedule> getSchedulesForNextWeek(int doctorId, LocalDate weekStart) {
+    public List<DoctorSchedule> getSchedulesForNextWeek(int doctorId, LocalDateTime weekStart) {
         checkDoctorExist(doctorId);
 //        if (weekStart == null || weekStart.isBefore(LocalDate.now())) {
 //            throw new IllegalArgumentException("Week start date must be today or in the future.");

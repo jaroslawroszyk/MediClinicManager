@@ -23,6 +23,15 @@ public class PersonalInfo {
         this.address = address;
     }
 
+    public void printInfo() {
+        System.out.println("First Name: " + getFirstName());
+        System.out.println("Last Name: " + getLastName());
+        System.out.println("Phone Number: " + getPhoneNumber());
+        System.out.println("Email: " + getEmail());
+        System.out.println("Address: " + getAddress());
+
+    }
+
     public PersonalInfo(@NotNull String firstName, @NotNull String lastName) {
         setFirstName(firstName);
         setLastName(lastName);

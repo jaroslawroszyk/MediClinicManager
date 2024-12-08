@@ -18,8 +18,8 @@ public class PatientRepository_Tests {
     @BeforeEach
     public void setUp() {
         repository = new PatientRepository();
-        patient1 = new Patient(new PersonalInfo("John", "Doe", "+48123456789", "john.doe@example.com", "Wroclaw"), "44051401359", new BirthDate("1990-05-15"), 18);
-        patient2 = new Patient(new PersonalInfo("Jane", "Smith", "+48123456789", "john.doe@example.com", "Wroclaw"), "44051401359", new BirthDate("1990-05-15"), 18);
+        patient1 = new Patient(1, new PersonalInfo("John", "Doe", "+48123456789", "john.doe@example.com", "Wroclaw"), "44051401359", new BirthDate("1990-05-15"), 18);
+        patient2 = new Patient(1, new PersonalInfo("Jane", "Smith", "+48123456789", "john.doe@example.com", "Wroclaw"), "44051401359", new BirthDate("1990-05-15"), 18);
         repository.save(patient1);
         repository.save(patient2);
     }
@@ -40,7 +40,7 @@ public class PatientRepository_Tests {
 
     @Test
     public void testUpdateByPesel() {
-        Patient updatedPatient = new Patient(new PersonalInfo("John", "Doe", "+48123456789", "john.doe@example.com", "Wroclaw"), "44051401359", new BirthDate("1990-05-15"), 18);
+        Patient updatedPatient = new Patient(1, new PersonalInfo("John", "Doe", "+48123456789", "john.doe@example.com", "Wroclaw"), "44051401359", new BirthDate("1990-05-15"), 18);
         boolean updated = repository.updateByPesel("44051401359", updatedPatient);
         Assertions.assertTrue(updated);
         Assertions.assertEquals("+48123456789", repository.findByPesel("44051401359").get().getPersonalInfo().getPhoneNumber());
