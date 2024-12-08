@@ -34,4 +34,15 @@ public class DoctorRepository implements IDoctorRepository {
         }
         return result;
     }
+
+    @Override
+    public void printAllDoctors()
+    {
+        for (Doctor doctor : doctorMap.values()) {
+            System.out.println("Doctor Id " + doctor.getId());
+            doctor.getPersonalInfo().printInfo();
+            System.out.println("\n");
+        }
+    }
+
 }

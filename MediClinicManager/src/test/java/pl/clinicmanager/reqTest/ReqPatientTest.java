@@ -8,13 +8,16 @@ import pl.clinicmanager.model.IDoctorScheduleRepository;
 import pl.clinicmanager.model.IPatientRepository;
 import pl.clinicmanager.model.IDoctorRepository;
 import pl.clinicmanager.model.DoctorSpecialty;
+import pl.clinicmanager.repository.MedicalAppointmentRepository;
 import pl.clinicmanager.service.DoctorScheduleService;
 import pl.clinicmanager.service.DoctorService;
+import pl.clinicmanager.service.MedicalAppointmentService;
 import pl.clinicmanager.service.PatientService;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 
+import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 import java.util.Set;
@@ -29,6 +32,9 @@ public class ReqPatientTest {
     private IDoctorRepository doctorRepository;
     private DoctorScheduleService doctorScheduleService;
     private IDoctorScheduleRepository doctorScheduleRepository;
+    private MedicalAppointmentRepository medicalAppointmentRepository;
+    private MedicalAppointmentService medicalAppointmentService;
+    private MedicalAppointment medicalAppointment;
 
     @BeforeEach
     void setUp() {
@@ -39,6 +45,9 @@ public class ReqPatientTest {
 
         doctorScheduleRepository = mock(IDoctorScheduleRepository.class);
         doctorScheduleService = new DoctorScheduleService(doctorScheduleRepository, doctorRepository);
+        medicalAppointmentRepository = mock(MedicalAppointmentRepository.class);
+        medicalAppointmentService = mock(MedicalAppointmentService.class);
+        medicalAppointment = mock(MedicalAppointment.class);
     }
 
     @Test
@@ -47,7 +56,7 @@ public class ReqPatientTest {
         /*
         As a receptionist, I want to be able to create a new patient profile containing their personal and contact information needed to provide medical services.
         */
-        Patient patient = new Patient(new PersonalInfo("John", "Doe", "+48123456789", "john.doe@example.com", "Wroclaw"), "44051401359", new BirthDate("1990-05-15"), 18);
+        Patient patient = new Patient(1, new PersonalInfo("John", "Doe", "+48123456789", "john.doe@example.com", "Wroclaw"), "44051401359", new BirthDate("1990-05-15"), 18);
         patientService.addPatient(patient);
 
         verify(patientRepository, times(1)).save(patient);
@@ -64,7 +73,7 @@ public class ReqPatientTest {
         /*
          As a receptionist, I want to be able to find a patient by PESEL number and display all of his data.
          */
-        Patient patient = new Patient(new PersonalInfo("John", "Doe", "+48123456789", "john.doe@example.com", "Wroclaw"), "44051401359", new BirthDate("1990-05-15"), 18);
+        Patient patient = new Patient(1, new PersonalInfo("John", "Doe", "+48123456789", "john.doe@example.com", "Wroclaw"), "44051401359", new BirthDate("1990-05-15"), 18);
 
         when(patientRepository.findByPesel("44051401359")).thenReturn(Optional.of(patient));
 
@@ -85,9 +94,9 @@ public class ReqPatientTest {
         for testing purposes delete it leter
          */
         Patient patient1 =
-                new Patient(new PersonalInfo("John", "Doe", "+48123456789", "john.doe@example.com", "Wroclaw"), "44051401359", new BirthDate("1990-05-15"), 18);
+                new Patient(1, new PersonalInfo("John", "Doe", "+48123456789", "john.doe@example.com", "Wroclaw"), "44051401359", new BirthDate("1990-05-15"), 18);
         Patient patient2 =
-                new Patient(new PersonalInfo("John", "Doe", "+48123456789", "john.doe@example.com", "Wroclaw"), "44051401359", new BirthDate("1990-05-15"), 18);
+                new Patient(1, new PersonalInfo("John", "Doe", "+48123456789", "john.doe@example.com", "Wroclaw"), "44051401359", new BirthDate("1990-05-15"), 18);
         List<Patient> patients = List.of(patient1, patient2);
 
         when(patientRepository.findPatientsByFirstName("John")).thenReturn(Optional.of(patients));
@@ -109,9 +118,9 @@ public class ReqPatientTest {
         As a receptionist I want to be able to search for all matching patients with a given last name and display all the details of the patients found.
          */
         Patient patient1 =
-                new Patient(new PersonalInfo("John", "Doe", "+48123456789", "john.doe@example.com", "Wroclaw"), "44051401359", new BirthDate("1990-05-15"), 18);
+                new Patient(1, new PersonalInfo("John", "Doe", "+48123456789", "john.doe@example.com", "Wroclaw"), "44051401359", new BirthDate("1990-05-15"), 18);
         Patient patient2 =
-                new Patient(new PersonalInfo("Ada", "Doe", "+48123456789", "du.doe@example.com", "Wroclaw"), "44051401359", new BirthDate("1990-05-15"), 28);
+                new Patient(1, new PersonalInfo("Ada", "Doe", "+48123456789", "du.doe@example.com", "Wroclaw"), "44051401359", new BirthDate("1990-05-15"), 28);
         List<Patient> patients = List.of(patient1, patient2);
 
         when(patientRepository.findPatientsByLastName("Doe")).thenReturn(Optional.of(patients));
@@ -215,9 +224,9 @@ public class ReqPatientTest {
         int doctorId = 1;
         LocalDateTime startTime = LocalDateTime.of(2024, 12, 10, 9, 0);
         LocalDateTime endTime = LocalDateTime.of(2024, 12, 10, 17, 0);
-        DoctorSchedule schedule = new DoctorSchedule(doctorId, startTime, endTime);
+        DoctorSchedule schedule = new DoctorSchedule(doctor, startTime, endTime);
 
-        doctorScheduleService.createSchedule2(doctorId, schedule);
+        doctorScheduleService.createSchedule(schedule);
 
         verify(doctorScheduleRepository, times(1)).save(schedule);
 
@@ -229,7 +238,7 @@ public class ReqPatientTest {
     @Test
     void receptionistGetSchedulesForDoctorForNextWeek() {
     /*
-     Jako pracownik recepcji chcę móc pobrać wszystkie utworzone grafiki wybranego lekarza na najbliższy tydzień,
+     4.2 Jako pracownik recepcji chcę móc pobrać wszystkie utworzone grafiki wybranego lekarza na najbliższy tydzień,
      abym mógł sprawdzić w jakich godzinach przyjmuje pacjentów.
      */
         int doctorId = 1;
@@ -238,12 +247,12 @@ public class ReqPatientTest {
         when(doctorRepository.findById(doctorId)).thenReturn(Optional.of(doctor));
         when(doctorRepository.save(any(Doctor.class))).thenReturn(doctor);
 
-        LocalDate weekStart = LocalDate.now();
+        LocalDateTime weekStart = LocalDate.now().atStartOfDay();
 
         List<DoctorSchedule> schedules = List.of(
-                new DoctorSchedule(doctorId, LocalDateTime.now().plusDays(1).withHour(9).withMinute(0).withSecond(0).withNano(0), LocalDateTime.now().plusDays(1).withHour(15).withMinute(0).withSecond(0).withNano(0)),
-                new DoctorSchedule(doctorId, LocalDateTime.now().plusDays(3).withHour(10).withMinute(0).withSecond(0).withNano(0), LocalDateTime.now().plusDays(3).withHour(14).withMinute(0).withSecond(0).withNano(0)),
-                new DoctorSchedule(doctorId, LocalDateTime.now().plusDays(5).withHour(8).withMinute(0).withSecond(0).withNano(0), LocalDateTime.now().plusDays(5).withHour(12).withMinute(0).withSecond(0).withNano(0))
+                new DoctorSchedule(doctor, LocalDateTime.now().plusDays(1).withHour(9).withMinute(0).withSecond(0).withNano(0), LocalDateTime.now().plusDays(1).withHour(15).withMinute(0).withSecond(0).withNano(0)),
+                new DoctorSchedule(doctor, LocalDateTime.now().plusDays(3).withHour(10).withMinute(0).withSecond(0).withNano(0), LocalDateTime.now().plusDays(3).withHour(14).withMinute(0).withSecond(0).withNano(0)),
+                new DoctorSchedule(doctor, LocalDateTime.now().plusDays(5).withHour(8).withMinute(0).withSecond(0).withNano(0), LocalDateTime.now().plusDays(5).withHour(12).withMinute(0).withSecond(0).withNano(0))
         );
 
         when(doctorScheduleRepository.findSchedulesByDoctorIdAndWeek(doctorId, weekStart)).thenReturn(schedules);
@@ -261,5 +270,67 @@ public class ReqPatientTest {
 
         verify(doctorScheduleRepository, times(1)).findSchedulesByDoctorIdAndWeek(doctorId, weekStart);
     }
+
+//    @Test
+//    void receptionistCreateMedicalAppointment() { // 5.1
+//    /*
+//     Jako recepcjonista chcę móc umówić pacjenta na wizytę lekarską, wybierając dostępnego lekarza, termin oraz pacjenta.
+//     */
+//
+//        // Tworzenie danych testowych
+//        Patient patient = new Patient(1, new PersonalInfo("John", "Doe", "+48123456789", "john.doe@example.com", "Wroclaw"), "44051401359", new BirthDate("1990-05-15"), 18);
+//        Doctor doctor = new Doctor(1, new PersonalInfo("Anna", "Nowak", "123456789", "anna.nowak@example.com", "Wroclaw"), Set.of(DoctorSpecialty.CARDIOLOGY));
+//        LocalDateTime appointmentTime = LocalDateTime.of(2024, 12, 15, 10, 0);
+//
+//        // Konfiguracja mocków
+//        when(patientService.findPatientByPesel("44051401359")).thenReturn(patient); // Mockowanie metody w PatientService
+//        when(doctorRepository.findById(1)).thenReturn(Optional.of(doctor));
+//
+//        // Wywołanie metody do zarejestrowania wizyty
+//        medicalAppointmentService.bookAppointment(patient.getPesel(), doctor.getId(), appointmentTime);
+//
+//        // Weryfikacja, czy metoda save() została wywołana na mocku repozytorium
+//        verify(medicalAppointmentRepository, times(1)).save(any(MedicalAppointment.class));
+//
+//        // Sprawdzenie, czy wywołana wizyta ma poprawne dane
+//        ArgumentCaptor<MedicalAppointment> captor = ArgumentCaptor.forClass(MedicalAppointment.class);
+//        verify(medicalAppointmentRepository).save(captor.capture());
+//        MedicalAppointment capturedAppointment = captor.getValue();
+//
+//        Assertions.assertNotNull(capturedAppointment);
+//        Assertions.assertEquals(patient, capturedAppointment.getPatient());
+//        Assertions.assertEquals(doctor, capturedAppointment.getDoctor());
+//        Assertions.assertEquals(appointmentTime, capturedAppointment.getStartTime());
+//    }
+
+//    @Test
+//    void receptionistCreateMedicalAppointment() { // 5.1
+//    /*
+//     Jako recepcjonista chcę móc umówić pacjenta na wizytę lekarską, wybierając dostępnego lekarza, termin oraz pacjenta.
+//     */
+//
+//        // Tworzenie danych testowych
+//        Patient patient = new Patient(1, new PersonalInfo("John", "Doe", "+48123456789", "john.doe@example.com", "Wroclaw"), "44051401359", new BirthDate("1990-05-15"), 18);
+//        Doctor doctor = new Doctor(1, new PersonalInfo("Anna", "Nowak", "123456789", "anna.nowak@example.com", "Wroclaw"), Set.of(DoctorSpecialty.CARDIOLOGY));
+//        LocalDateTime appointmentTime = LocalDateTime.of(2024, 12, 15, 10, 0);
+//
+//        // Konfiguracja mocków
+//        when(patientRepository.findByPesel("44051401359")).thenReturn(Optional.of(patient));
+//        when(doctorRepository.findById(1)).thenReturn(Optional.of(doctor));
+//
+//        // Wywołanie metody do zarejestrowania wizyty
+//        MedicalAppointment appointment = new MedicalAppointment(patient, doctor, appointmentTime);
+//        medicalAppointmentService.bookAppointment(patient.getPesel(), doctor.getId(), appointmentTime);
+//
+//        // Weryfikacja, czy metoda save() została wywołana na mocku repozytorium
+//        verify(medicalAppointmentRepository, times(1)).save(appointment);
+//
+//        // Sprawdzenie, czy obiekt appointment został utworzony i ma odpowiednie dane
+//        Assertions.assertNotNull(appointment);
+////        Assertions.assertEquals(patient.getId(), appointment.getPatientId());
+////        Assertions.assertEquals(doctor.getId(), appointment.getDoctorId());
+//        Assertions.assertEquals(appointmentTime, appointment.getStartTime());
+//    }
+
 
 }

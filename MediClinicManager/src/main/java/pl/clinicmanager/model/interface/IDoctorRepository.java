@@ -9,4 +9,6 @@ public interface IDoctorRepository {
     Optional<Doctor> findById(int id);
 
     Set<Doctor> findBySpecialty(DoctorSpecialty specialty);
+
+    void printAllDoctors();
 }

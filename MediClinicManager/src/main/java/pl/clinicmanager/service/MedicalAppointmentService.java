@@ -1,42 +1,53 @@
 package pl.clinicmanager.service;
 
+import pl.clinicmanager.model.Doctor;
+import pl.clinicmanager.model.DoctorSchedule;
 import pl.clinicmanager.model.MedicalAppointment;
-import pl.clinicmanager.repository.DoctorRepository;
+import pl.clinicmanager.model.Patient;
 import pl.clinicmanager.repository.DoctorScheduleRepository;
 import pl.clinicmanager.repository.MedicalAppointmentRepository;
 
 import java.time.LocalDateTime;
 
 public class MedicalAppointmentService {
-    private final DoctorRepository doctorRepository;
-    private final DoctorScheduleRepository scheduleRepository;
-    private final MedicalAppointmentRepository appointmentRepository;
+    private final MedicalAppointmentRepository medicalAppointmentRepository;
+    private final PatientService patientService;
+    private final DoctorService doctorService;
+    private final DoctorScheduleRepository doctorScheduleRepository;
 
-    public MedicalAppointmentService(DoctorRepository doctorRepository, DoctorScheduleRepository scheduleRepository, MedicalAppointmentRepository appointmentRepository) {
-        this.doctorRepository = doctorRepository;
-        this.scheduleRepository = scheduleRepository;
-        this.appointmentRepository = appointmentRepository;
+    public MedicalAppointmentService(
+            MedicalAppointmentRepository medicalAppointmentRepository,
+            PatientService patientService,
+            DoctorService doctorService,
+            DoctorScheduleRepository doctorScheduleRepository
+    ) {
+        this.medicalAppointmentRepository = medicalAppointmentRepository;
+        this.patientService = patientService;
+        this.doctorService = doctorService;
+        this.doctorScheduleRepository = doctorScheduleRepository;
     }
 
-    public void bookAppointment(int appointmentId, int doctorId, int patientId, LocalDateTime startTime) {
-        // Check if doctor exists
-        if (doctorRepository.findById(doctorId).isEmpty()) {
-            throw new IllegalArgumentException("Doctor with ID " + doctorId + " does not exist.");
+    public void bookAppointment(String pesel, int doctorId, LocalDateTime appointmentTime) {
+        Patient patient = patientService.findPatientByPesel(pesel);
+        if (patient == null) {
+            throw new RuntimeException("Patient not found");
         }
 
-        boolean isInSchedule = scheduleRepository.findSchedulesByDoctorIdAndWeek(doctorId, startTime.toLocalDate())
-                .stream()
-                .anyMatch(schedule -> !startTime.isBefore(schedule.getStartTime()) && !startTime.plusMinutes(15).isAfter(schedule.getEndTime()));
+        Doctor doctor = doctorService.findDoctorById(doctorId)
+                .orElseThrow(() -> new RuntimeException("Doctor not found"));
 
-        if (!isInSchedule) {
-            throw new IllegalArgumentException("Appointment time is outside of doctor's available schedule.");
+        if (medicalAppointmentRepository.existsByDoctorIdAndTime(doctorId, appointmentTime)) {
+            throw new RuntimeException("Doctor is already booked at this time");
         }
 
-        boolean isDoctorAvailable = appointmentRepository.findByDoctorIdAndTime(doctorId, startTime).isEmpty();
-        if (!isDoctorAvailable) {
-            throw new IllegalArgumentException("Doctor is already booked at this time.");
+        DoctorSchedule schedule = doctorScheduleRepository.findByDoctorId(doctorId)
+                .orElseThrow(() -> new RuntimeException("Doctor schedule not found"));
+
+        if (appointmentTime.isBefore(schedule.getStartTime()) || appointmentTime.isAfter(schedule.getEndTime())) {
+            throw new IllegalArgumentException("Doctor is not available at the requested time.");
         }
 
-        appointmentRepository.save(new MedicalAppointment(appointmentId, doctorId, patientId, startTime));
+        MedicalAppointment appointment = new MedicalAppointment(patient, doctor, appointmentTime);
+        medicalAppointmentRepository.save(appointment);
     }
 }

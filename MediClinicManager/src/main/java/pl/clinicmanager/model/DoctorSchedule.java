@@ -3,18 +3,18 @@ package pl.clinicmanager.model;
 import java.time.LocalDateTime;
 
 public class DoctorSchedule {
-    private int doctorId;
-    private LocalDateTime startTime;
-    private LocalDateTime endTime;
+    private final Doctor doctor;
+    private final LocalDateTime startTime;
+    private final LocalDateTime endTime;
 
-    public DoctorSchedule(int doctorId, LocalDateTime startTime, LocalDateTime endTime) {
-        this.doctorId = doctorId; // what if doctor doesont exit?
+    public DoctorSchedule(Doctor doctor, LocalDateTime startTime, LocalDateTime endTime) {
+        this.doctor = doctor;
         this.startTime = startTime;
         this.endTime = endTime;
     }
 
     public int getDoctorId() {
-        return doctorId;
+        return doctor.getId();
     }
 
     public LocalDateTime getStartTime() {
@@ -28,7 +28,7 @@ public class DoctorSchedule {
     @Override
     public String toString() {
         return "DoctorSchedule{" +
-                "doctorId=" + doctorId +
+                "doctorId=" + getDoctorId() +
                 ", startTime=" + startTime +
                 ", endTime=" + endTime +
                 '}';

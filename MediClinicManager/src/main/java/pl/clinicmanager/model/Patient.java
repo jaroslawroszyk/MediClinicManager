@@ -3,6 +3,7 @@ package pl.clinicmanager.model;
 import org.jetbrains.annotations.NotNull;
 
 public class Patient {
+    private int id;
     private PersonalInfo personalInfo;
     @NotNull
     private String pesel;
@@ -12,11 +13,20 @@ public class Patient {
     public Patient() {
     }
 
-    public Patient(PersonalInfo personalInfo, String pesel, BirthDate birthDate, int age) {
+    public Patient(int id, PersonalInfo personalInfo, String pesel, BirthDate birthDate, int age) {
+        this.id = id;
         this.personalInfo = personalInfo;
-        this.pesel = pesel;
+        setPesel(pesel);
         this.birthDate = birthDate;
         setAge(age);
+    }
+
+    public void setId(int id) {
+        this.id = id;
+    }
+
+    public int getId() {
+        return id;
     }
 
     public PersonalInfo getPersonalInfo() {

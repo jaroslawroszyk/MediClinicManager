@@ -1,11 +1,11 @@
 package pl.clinicmanager.model;
 
-import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
-import java.util.Set;
 
 public interface IDoctorScheduleRepository {
-    public void save(DoctorSchedule schedule);
-    public List<DoctorSchedule> findSchedulesByDoctorIdAndWeek(int doctorId, LocalDate weekStart);
+    void save(DoctorSchedule schedule);
+    List<DoctorSchedule> findSchedulesByDoctorIdAndWeek(int doctorId, LocalDateTime weekStart);
+    Optional<DoctorSchedule> findByDoctorId(int doctorId);
 }

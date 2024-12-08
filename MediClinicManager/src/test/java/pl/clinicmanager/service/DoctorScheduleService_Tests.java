@@ -47,10 +47,10 @@ class DoctorScheduleService_Tests {
         );
 
         when(doctorRepository.findById(doctorId)).thenReturn(Optional.of(doctor));
+        DoctorSchedule schedule = new DoctorSchedule(doctor, startTime, endTime);
+        scheduleService.createSchedule(schedule);
 
-        scheduleService.createSchedule(doctorId, startTime, endTime);
-
-        List<DoctorSchedule> schedules = scheduleRepository.findSchedulesByDoctorIdAndWeek(doctorId, startTime.toLocalDate());
+        List<DoctorSchedule> schedules = scheduleRepository.findSchedulesByDoctorIdAndWeek(doctorId, startTime);
         assertEquals(1, schedules.size());
         assertEquals(startTime, schedules.get(0).getStartTime());
         assertEquals(endTime, schedules.get(0).getEndTime());
@@ -62,8 +62,18 @@ class DoctorScheduleService_Tests {
         LocalDateTime startTime = LocalDateTime.of(2024, 11, 25, 9, 0);
         LocalDateTime endTime = LocalDateTime.of(2024, 11, 25, 17, 0);
         when(doctorRepository.findById(doctorId)).thenReturn(Optional.empty());
-
-        assertThrows(IllegalArgumentException.class, () -> scheduleService.createSchedule(doctorId, startTime, endTime));
+        Doctor doctor = new Doctor(
+                doctorId,
+                new PersonalInfo(
+                        "Jan",
+                        "Kowalski",
+                        "123456789",
+                        "jan.kowalski@example.com",
+                        "ul. Przykładowa 1"),
+                Set.of()
+        );
+        DoctorSchedule schedule = new DoctorSchedule(doctor, startTime, endTime);
+        assertThrows(IllegalArgumentException.class, () -> scheduleService.createSchedule(schedule));
     }
 
     @Test
@@ -72,8 +82,19 @@ class DoctorScheduleService_Tests {
         LocalDateTime startTime = LocalDateTime.of(2024, 11, 25, 17, 0);
         LocalDateTime endTime = LocalDateTime.of(2024, 11, 25, 9, 0);
         when(doctorRepository.findById(doctorId)).thenReturn(Optional.of(new Doctor()));
+        Doctor doctor = new Doctor(
+                doctorId,
+                new PersonalInfo(
+                        "Jan",
+                        "Kowalski",
+                        "123456789",
+                        "jan.kowalski@example.com",
+                        "ul. Przykładowa 1"),
+                Set.of()
+        );
+        DoctorSchedule schedule = new DoctorSchedule(doctor, startTime, endTime);
 
-        assertThrows(IllegalArgumentException.class, () -> scheduleService.createSchedule(doctorId, startTime, endTime));
+        assertThrows(IllegalArgumentException.class, () -> scheduleService.createSchedule(schedule));
     }
 
     @Test
@@ -84,11 +105,23 @@ class DoctorScheduleService_Tests {
         LocalDateTime startTime2 = LocalDateTime.of(2024, 11, 27, 10, 0);
         LocalDateTime endTime2 = LocalDateTime.of(2024, 11, 27, 15, 0);
         when(doctorRepository.findById(doctorId)).thenReturn(Optional.of(new Doctor()));
+        Doctor doctor = new Doctor(
+                doctorId,
+                new PersonalInfo(
+                        "Jan",
+                        "Kowalski",
+                        "123456789",
+                        "jan.kowalski@example.com",
+                        "ul. Przykładowa 1"),
+                Set.of()
+        );
+        DoctorSchedule schedule = new DoctorSchedule(doctor, startTime1, endTime1);
+        scheduleService.createSchedule(schedule);
+        DoctorSchedule schedule2 = new DoctorSchedule(doctor, startTime2, endTime2);
+        scheduleService.createSchedule(schedule2);
+        LocalDateTime startTime = LocalDateTime.of(2024, 11, 25, 9, 0);
 
-        scheduleService.createSchedule(doctorId, startTime1, endTime1);
-        scheduleService.createSchedule(doctorId, startTime2, endTime2);
-
-        List<DoctorSchedule> schedules = scheduleService.getSchedulesForNextWeek(doctorId, LocalDate.of(2024, 11, 25));
+        List<DoctorSchedule> schedules = scheduleService.getSchedulesForNextWeek(doctorId, startTime);
 
         assertEquals(2, schedules.size());
     }
