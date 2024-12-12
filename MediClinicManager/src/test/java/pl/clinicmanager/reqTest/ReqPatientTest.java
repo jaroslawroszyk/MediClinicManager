@@ -17,7 +17,8 @@ import pl.clinicmanager.service.PatientService;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 
-import java.util.Collections;
+import static org.junit.jupiter.api.Assertions.*;
+
 import java.util.List;
 import java.util.Optional;
 import java.util.Set;
@@ -61,11 +62,11 @@ public class ReqPatientTest {
 
         verify(patientRepository, times(1)).save(patient);
 
-        Assertions.assertNotNull(patient.getPersonalInfo().getFirstName());
-        Assertions.assertNotNull(patient.getPersonalInfo().getLastName());
-        Assertions.assertNotNull(patient.getPesel());
-        Assertions.assertNotNull(patient.getPersonalInfo().getPhoneNumber());
-        Assertions.assertNotNull(patient.getPersonalInfo().getEmail());
+        assertNotNull(patient.getPersonalInfo().getFirstName());
+        assertNotNull(patient.getPersonalInfo().getLastName());
+        assertNotNull(patient.getPesel());
+        assertNotNull(patient.getPersonalInfo().getPhoneNumber());
+        assertNotNull(patient.getPersonalInfo().getEmail());
     }
 
     @Test
@@ -79,36 +80,13 @@ public class ReqPatientTest {
 
         Optional<Patient> foundPatient = Optional.ofNullable(patientService.findPatientByPesel("44051401359"));
 
-        Assertions.assertTrue(foundPatient.isPresent());
-        Assertions.assertEquals(patient, foundPatient.get());
-        Assertions.assertEquals("John", foundPatient.get().getPersonalInfo().getFirstName());
-        Assertions.assertEquals("Doe", foundPatient.get().getPersonalInfo().getLastName());
-        Assertions.assertEquals("44051401359", foundPatient.get().getPesel());
+        assertTrue(foundPatient.isPresent());
+        assertEquals(patient, foundPatient.get());
+        assertEquals("John", foundPatient.get().getPersonalInfo().getFirstName());
+        assertEquals("Doe", foundPatient.get().getPersonalInfo().getLastName());
+        assertEquals("44051401359", foundPatient.get().getPesel());
 
         verify(patientRepository, times(1)).findByPesel("44051401359");
-    }
-
-    @Test
-    void receptionistFindByFirstNameAllMatchingPatients() { // 1.3.1 - delete it later
-        /*
-        for testing purposes delete it leter
-         */
-        Patient patient1 =
-                new Patient(1, new PersonalInfo("John", "Doe", "+48123456789", "john.doe@example.com", "Wroclaw"), "44051401359", new BirthDate("1990-05-15"), 18);
-        Patient patient2 =
-                new Patient(1, new PersonalInfo("John", "Doe", "+48123456789", "john.doe@example.com", "Wroclaw"), "44051401359", new BirthDate("1990-05-15"), 18);
-        List<Patient> patients = List.of(patient1, patient2);
-
-        when(patientRepository.findPatientsByFirstName("John")).thenReturn(Optional.of(patients));
-
-        List<Patient> foundPatients = patientService.findPatientByFirstName("John");
-
-        Assertions.assertNotNull(foundPatients);
-        Assertions.assertEquals(2, foundPatients.size());
-        Assertions.assertTrue(foundPatients.contains(patient1));
-        Assertions.assertTrue(foundPatients.contains(patient2));
-
-        verify(patientRepository, times(1)).findPatientsByFirstName("John");
     }
 
     @Test
@@ -127,10 +105,10 @@ public class ReqPatientTest {
 
         List<Patient> foundPatients = patientService.findPatientByLastName("Doe");
 
-        Assertions.assertNotNull(foundPatients);
-        Assertions.assertEquals(2, foundPatients.size());
-        Assertions.assertTrue(foundPatients.contains(patient1));
-        Assertions.assertTrue(foundPatients.contains(patient2));
+        assertNotNull(foundPatients);
+        assertEquals(2, foundPatients.size());
+        assertTrue(foundPatients.contains(patient1));
+        assertTrue(foundPatients.contains(patient2));
 
         verify(patientRepository, times(1)).findPatientsByLastName("Doe");
     }
@@ -147,9 +125,9 @@ public class ReqPatientTest {
 
         verify(doctorRepository, times(1)).save(doctor);
 
-        Assertions.assertNotNull(doctor.getSpecialties());
-        Assertions.assertTrue(doctor.getSpecialties().contains(DoctorSpecialty.CARDIOLOGY));
-        Assertions.assertTrue(doctor.getSpecialties().contains(DoctorSpecialty.DERMATOLOGY));
+        assertNotNull(doctor.getSpecialties());
+        assertTrue(doctor.getSpecialties().contains(DoctorSpecialty.CARDIOLOGY));
+        assertTrue(doctor.getSpecialties().contains(DoctorSpecialty.DERMATOLOGY));
     }
 
     @Test
@@ -165,8 +143,8 @@ public class ReqPatientTest {
         doctorService.addSpecialtyToDoctor(1, DoctorSpecialty.DERMATOLOGY);
         verify(doctorRepository, times(1)).save(doctor);
 
-        Assertions.assertEquals(2, doctor.getSpecialties().size());
-        Assertions.assertTrue(doctor.getSpecialties().contains(DoctorSpecialty.DERMATOLOGY));
+        assertEquals(2, doctor.getSpecialties().size());
+        assertTrue(doctor.getSpecialties().contains(DoctorSpecialty.DERMATOLOGY));
     }
 
     @Test
@@ -181,11 +159,11 @@ public class ReqPatientTest {
 
         Optional<Doctor> foundDoctor = doctorService.findDoctorById(1);
 
-        Assertions.assertTrue(foundDoctor.isPresent());
-        Assertions.assertEquals(doctor, foundDoctor.get());
-        Assertions.assertEquals("Anna", foundDoctor.get().getPersonalInfo().getFirstName());
-        Assertions.assertEquals("Nowak", foundDoctor.get().getPersonalInfo().getLastName());
-        Assertions.assertTrue(foundDoctor.get().getSpecialties().contains(DoctorSpecialty.CARDIOLOGY));
+        assertTrue(foundDoctor.isPresent());
+        assertEquals(doctor, foundDoctor.get());
+        assertEquals("Anna", foundDoctor.get().getPersonalInfo().getFirstName());
+        assertEquals("Nowak", foundDoctor.get().getPersonalInfo().getLastName());
+        assertTrue(foundDoctor.get().getSpecialties().contains(DoctorSpecialty.CARDIOLOGY));
 
         verify(doctorRepository, times(1)).findById(1);
     }
@@ -203,10 +181,10 @@ public class ReqPatientTest {
 
         Set<Doctor> foundDoctors = doctorService.findDoctorsBySpecialty(DoctorSpecialty.CARDIOLOGY);
 
-        Assertions.assertNotNull(foundDoctors);
-        Assertions.assertEquals(2, foundDoctors.size());
-        Assertions.assertTrue(foundDoctors.contains(doctor1));
-        Assertions.assertTrue(foundDoctors.contains(doctor2));
+        assertNotNull(foundDoctors);
+        assertEquals(2, foundDoctors.size());
+        assertTrue(foundDoctors.contains(doctor1));
+        assertTrue(foundDoctors.contains(doctor2));
 
         verify(doctorRepository, times(1)).findBySpecialty(DoctorSpecialty.CARDIOLOGY);
     }
@@ -230,9 +208,9 @@ public class ReqPatientTest {
 
         verify(doctorScheduleRepository, times(1)).save(schedule);
 
-        Assertions.assertEquals(doctorId, schedule.getDoctorId());
-        Assertions.assertEquals(startTime, schedule.getStartTime());
-        Assertions.assertEquals(endTime, schedule.getEndTime());
+        assertEquals(doctorId, schedule.getDoctorId());
+        assertEquals(startTime, schedule.getStartTime());
+        assertEquals(endTime, schedule.getEndTime());
     }
 
     @Test
@@ -259,14 +237,14 @@ public class ReqPatientTest {
 
         List<DoctorSchedule> foundSchedules = doctorScheduleService.getSchedulesForNextWeek(doctorId, weekStart);
 
-        Assertions.assertNotNull(foundSchedules);
-        Assertions.assertEquals(3, foundSchedules.size());
-        Assertions.assertEquals(doctorId, foundSchedules.get(0).getDoctorId());
+        assertNotNull(foundSchedules);
+        assertEquals(3, foundSchedules.size());
+        assertEquals(doctorId, foundSchedules.get(0).getDoctorId());
 
         LocalDateTime expectedStartTime = LocalDateTime.now().plusDays(1).withHour(9).withMinute(0).withSecond(0).withNano(0);
         LocalDateTime expectedEndTime = LocalDateTime.now().plusDays(1).withHour(15).withMinute(0).withSecond(0).withNano(0);
-        Assertions.assertEquals(expectedStartTime, foundSchedules.get(0).getStartTime());
-        Assertions.assertEquals(expectedEndTime, foundSchedules.get(0).getEndTime());
+        assertEquals(expectedStartTime, foundSchedules.get(0).getStartTime());
+        assertEquals(expectedEndTime, foundSchedules.get(0).getEndTime());
 
         verify(doctorScheduleRepository, times(1)).findSchedulesByDoctorIdAndWeek(doctorId, weekStart);
     }
@@ -297,10 +275,10 @@ public class ReqPatientTest {
 //        verify(medicalAppointmentRepository).save(captor.capture());
 //        MedicalAppointment capturedAppointment = captor.getValue();
 //
-//        Assertions.assertNotNull(capturedAppointment);
-//        Assertions.assertEquals(patient, capturedAppointment.getPatient());
-//        Assertions.assertEquals(doctor, capturedAppointment.getDoctor());
-//        Assertions.assertEquals(appointmentTime, capturedAppointment.getStartTime());
+//        assertNotNull(capturedAppointment);
+//        assertEquals(patient, capturedAppointment.getPatient());
+//        assertEquals(doctor, capturedAppointment.getDoctor());
+//        assertEquals(appointmentTime, capturedAppointment.getStartTime());
 //    }
 
 //    @Test
@@ -326,10 +304,10 @@ public class ReqPatientTest {
 //        verify(medicalAppointmentRepository, times(1)).save(appointment);
 //
 //        // Sprawdzenie, czy obiekt appointment został utworzony i ma odpowiednie dane
-//        Assertions.assertNotNull(appointment);
-////        Assertions.assertEquals(patient.getId(), appointment.getPatientId());
-////        Assertions.assertEquals(doctor.getId(), appointment.getDoctorId());
-//        Assertions.assertEquals(appointmentTime, appointment.getStartTime());
+//        assertNotNull(appointment);
+////        assertEquals(patient.getId(), appointment.getPatientId());
+////        assertEquals(doctor.getId(), appointment.getDoctorId());
+//        assertEquals(appointmentTime, appointment.getStartTime());
 //    }
 
 

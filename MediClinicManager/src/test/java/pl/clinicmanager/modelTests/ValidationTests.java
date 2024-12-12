@@ -5,7 +5,7 @@ import pl.clinicmanager.model.Validator;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-public class Validation_Tests {
+public class ValidationTests {
     @Test
     public void testValidEmail() {
         assertTrue(Validator.isValidEmail("example@example.com"));

@@ -14,7 +14,7 @@ import java.util.Set;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-class DoctorService_Tests {
+class DoctorServiceTests {
     private DoctorService doctorService;
     private IDoctorRepository doctorRepository;
 

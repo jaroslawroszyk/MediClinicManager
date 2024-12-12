@@ -8,9 +8,11 @@ import pl.clinicmanager.model.Patient;
 import pl.clinicmanager.model.PersonalInfo;
 import pl.clinicmanager.repository.PatientRepository;
 
+import static org.junit.jupiter.api.Assertions.*;
+
 import java.util.Optional;
 
-public class PatientRepository_Tests {
+public class PatientRepositoryTests {
     private PatientRepository repository;
     private Patient patient1;
     private Patient patient2;
@@ -27,27 +29,27 @@ public class PatientRepository_Tests {
     @Test
     public void testFindByPesel() {
         Optional<Patient> foundPatient = repository.findByPesel("44051401359");
-        Assertions.assertTrue(foundPatient.isPresent());
-        Assertions.assertEquals(patient1, foundPatient.get());
+        assertTrue(foundPatient.isPresent());
+        assertEquals(patient1, foundPatient.get());
     }
 
     @Test
     public void testDeleteByPesel() {
         boolean deleted = repository.deleteByPesel("44051401359");
-        Assertions.assertTrue(deleted);
-        Assertions.assertFalse(repository.findByPesel("44051401359").isPresent());
+        assertTrue(deleted);
+        assertFalse(repository.findByPesel("44051401359").isPresent());
     }
 
     @Test
     public void testUpdateByPesel() {
         Patient updatedPatient = new Patient(1, new PersonalInfo("John", "Doe", "+48123456789", "john.doe@example.com", "Wroclaw"), "44051401359", new BirthDate("1990-05-15"), 18);
         boolean updated = repository.updateByPesel("44051401359", updatedPatient);
-        Assertions.assertTrue(updated);
-        Assertions.assertEquals("+48123456789", repository.findByPesel("44051401359").get().getPersonalInfo().getPhoneNumber());
+        assertTrue(updated);
+        assertEquals("+48123456789", repository.findByPesel("44051401359").get().getPersonalInfo().getPhoneNumber());
     }
 
     @Test
     public void testFindAll() {
-        Assertions.assertEquals(2, repository.findAll().size());
+        assertEquals(2, repository.findAll().size());
     }
 }
