@@ -7,7 +7,6 @@ import pl.clinicmanager.model.IDoctorRepository;
 import pl.clinicmanager.repository.DoctorRepository;
 import pl.clinicmanager.repository.DoctorScheduleRepository;
 import pl.clinicmanager.repository.MedicalAppointmentRepository;
-import pl.clinicmanager.repository.PatientRepository;
 
 import java.time.LocalDateTime;
 import java.util.List;
@@ -18,7 +17,6 @@ class MedicalAppointmentService_Tests {
     private DoctorScheduleRepository scheduleRepository;
     private MedicalAppointmentRepository appointmentRepository;
     private MedicalAppointmentService appointmentService;
-    private IDoctorRepository idoctorRepository;
     private DoctorService doctorService;
     private Doctor doctor;
     private PatientService patientService;
@@ -28,8 +26,8 @@ class MedicalAppointmentService_Tests {
     void setUp() {
         scheduleRepository = new DoctorScheduleRepository();
         appointmentRepository = new MedicalAppointmentRepository();
-        idoctorRepository = new DoctorRepository(); // should be mocked?
-        doctorService = new DoctorService(idoctorRepository);
+        IDoctorRepository doctorRepository = new DoctorRepository();
+        doctorService = new DoctorService(doctorRepository);
         patientService = new PatientService();
         appointmentService = new MedicalAppointmentService(appointmentRepository, patientService, doctorService, scheduleRepository);
         doctor = new Doctor(1, new PersonalInfo("John", "Doe"), null);
@@ -38,7 +36,6 @@ class MedicalAppointmentService_Tests {
 
     @Test
     void bookAppointment_NonExistentDoctor() {
-        int doctorId = 2;
         int patientId = 1;
         LocalDateTime startTime = LocalDateTime.of(2024, 11, 25, 9, 0);
         patientService.addPatient(new Patient(patientId, new PersonalInfo("John", "Doe", "+48123456789", "john.doe@example.com", "Wroclaw"), "44051401359", new BirthDate("1990-05-15"), 18));
@@ -116,11 +113,11 @@ class MedicalAppointmentService_Tests {
     @Test
     void bookAppointment_DoctorOutsideWorkingHours() {
         int doctorId = 1;
-        LocalDateTime appointmentTime = LocalDateTime.of(2024, 11, 25, 8, 0); // Poza godzinami pracy
+        LocalDateTime appointmentTime = LocalDateTime.of(2024, 11, 25, 8, 0);
 
         DoctorSchedule schedule = new DoctorSchedule(doctor,
-                LocalDateTime.of(2024, 11, 25, 9, 0), // Początek pracy
-                LocalDateTime.of(2024, 11, 25, 17, 0)); // Koniec pracy
+                LocalDateTime.of(2024, 11, 25, 9, 0),
+                LocalDateTime.of(2024, 11, 25, 17, 0));
         scheduleRepository.save(schedule);
 
         Patient patient = new Patient(1,
@@ -135,20 +132,4 @@ class MedicalAppointmentService_Tests {
 
         assertEquals("Doctor is not available at the requested time.", exception.getMessage());
     }
-
-//    @Test
-//    void bookAppointment_DoctorOutsideWorkingHours() {
-//        int doctorId = 1;
-//        LocalDateTime appointmentTime = LocalDateTime.of(2024, 11, 25, 8, 0);
-//
-//        DoctorSchedule schedule = new DoctorSchedule(doctorId, LocalDateTime.of(2024, 11, 25, 9, 0), LocalDateTime.of(2024, 11, 25, 17, 0));
-//        scheduleRepository.save(schedule);
-//        Patient patient = new Patient(1, new PersonalInfo("John", "Doe", "+48123456789", "john.doe@example.com", "Wroclaw"), "44051401359", new BirthDate("1990-05-15"), 18);
-//        patientService.addPatient(patient);
-//
-//        Exception exception = assertThrows(IllegalArgumentException.class,
-//                () -> appointmentService.bookAppointment(patient.getPesel(), doctorId, appointmentTime));
-//
-//        assertEquals("Doctor is not available at the requested time.", exception.getMessage());
-//    }
 }

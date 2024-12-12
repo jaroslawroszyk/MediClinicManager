@@ -8,7 +8,6 @@ import pl.clinicmanager.model.PersonalInfo;
 import pl.clinicmanager.repository.DoctorRepository;
 import pl.clinicmanager.repository.DoctorScheduleRepository;
 
-import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
@@ -17,7 +16,7 @@ import java.util.Set;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
 
-class DoctorScheduleService_Tests {
+class DoctorScheduleServiceTests {
     private DoctorScheduleRepository scheduleRepository;
     private DoctorRepository doctorRepository;
     private DoctorScheduleService scheduleService;

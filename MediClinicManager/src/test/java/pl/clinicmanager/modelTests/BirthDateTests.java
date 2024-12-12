@@ -5,15 +5,16 @@ import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
 import pl.clinicmanager.model.BirthDate;
 import pl.clinicmanager.model.LocalDateProvider;
+import static org.junit.jupiter.api.Assertions.*;
 
 import java.time.LocalDate;
 
-public class BirthDate_Tests {
+public class BirthDateTests {
 
     @Test
     public void testValidBirthDate() {
         BirthDate birthDate = new BirthDate("1990-05-15");
-        Assertions.assertEquals(birthDate.getFormattedDate(), "1990-05-15");
+        assertEquals("1990-05-15", birthDate.getFormattedDate());
     }
 
     @Test
@@ -21,7 +22,7 @@ public class BirthDate_Tests {
         Exception exception = Assertions.assertThrows(IllegalArgumentException.class, () -> {
             new BirthDate("15-05-1990");
         });
-        Assertions.assertEquals(exception.getMessage(), "Invalid birth date format. Expected format: yyyy-MM-dd");
+        assertEquals("Invalid birth date format. Expected format: yyyy-MM-dd", exception.getMessage());
     }
 
     @Test
@@ -29,7 +30,7 @@ public class BirthDate_Tests {
         Exception exception = Assertions.assertThrows(IllegalArgumentException.class, () -> {
             new BirthDate("2050-01-01");
         });
-        Assertions.assertEquals(exception.getMessage(), "Birth date cannot be in the future");
+        assertEquals("Birth date cannot be in the future", exception.getMessage());
     }
 
     @Test
@@ -42,12 +43,12 @@ public class BirthDate_Tests {
         int expectedAge = 36;
         int actualAge = birthDate.calculateAge();
 
-        Assertions.assertEquals(expectedAge, actualAge);
+        assertEquals(expectedAge, actualAge);
     }
 
     @Test
     public void testValidLeapYearBirthDate() {
         BirthDate birthDate = new BirthDate("2000-02-29");
-        Assertions.assertEquals(birthDate.getFormattedDate(), "2000-02-29");
+        assertEquals("2000-02-29", birthDate.getFormattedDate());
     }
 }

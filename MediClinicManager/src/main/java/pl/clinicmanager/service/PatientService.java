@@ -34,11 +34,6 @@ public class PatientService implements IPatientService {
     }
 
     @Override
-    public List<Patient> findPatientByFirstName(String firstName) { // For test purposes
-        return patientRepository.findPatientsByFirstName(firstName).orElse(null);
-    }
-
-    @Override
     public List<Patient> findPatientByLastName(String lastName) {
         return patientRepository.findPatientsByLastName(lastName).orElse(null);
     }

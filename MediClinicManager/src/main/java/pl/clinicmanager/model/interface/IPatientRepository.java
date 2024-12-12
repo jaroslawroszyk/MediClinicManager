@@ -38,8 +38,6 @@ public interface IPatientRepository {
      */
     Optional<List<Patient>> findPatientsByLastName(String lastName);
 
-    Optional<List<Patient>> findPatientsByFirstName(String firstName);
-
     /**
      * Deletes a patient from the repository by their PESEL.
      *

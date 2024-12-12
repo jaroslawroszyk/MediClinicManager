@@ -38,31 +38,10 @@ public class PatientRepository implements IPatientRepository {
     }
 
     @Override
-    public Optional<List<Patient>> findPatientsByFirstName(String firstName) {
-        return Optional.of(patientList.stream()
-                .filter(p -> p.getPersonalInfo().getFirstName().equalsIgnoreCase(firstName))
-                .toList());
-    }
-
-    /**
-     * Deletes a patient by their PESEL.
-     *
-     * @param pesel the PESEL of the patient to delete
-     * @return true if a patient was removed, false if no matching patient was found
-     */
-    @Override
     public boolean deleteByPesel(String pesel) {
         return patientList.removeIf(patient -> patient.getPesel().equals(pesel));
     }
 
-    /**
-     * Updates a patient's record by their PESEL.
-     * Replaces the existing patient data with the updated data.
-     *
-     * @param pesel          the PESEL of the patient to update
-     * @param updatedPatient the updated patient object
-     * @return true if the update was successful, false if no matching patient was found
-     */
     @Override
     public boolean updateByPesel(String pesel, Patient updatedPatient) {
         for (int i = 0; i < patientList.size(); i++) {
@@ -73,7 +52,4 @@ public class PatientRepository implements IPatientRepository {
         }
         return false;
     }
-
-
-    // missing functions?
 }

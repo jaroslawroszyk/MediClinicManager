@@ -6,8 +6,9 @@ import org.junit.jupiter.api.Test;
 import pl.clinicmanager.model.BirthDate;
 import pl.clinicmanager.model.Patient;
 import pl.clinicmanager.model.PersonalInfo;
+import static org.junit.jupiter.api.Assertions.*;
 
-public class Patient_Tests {
+public class PatientTests {
 
     private Patient patient;
 
@@ -21,40 +22,31 @@ public class Patient_Tests {
         String patientName = patient.getPersonalInfo().getFirstName();
 
         String expectedName = "John";
-        Assertions.assertEquals(expectedName, patientName);
+        assertEquals(expectedName, patientName);
     }
-//
-//    @Test
-//    void tesr1()
-//    {
-//        Patient patient = new Patient(1, new PersonalInfo("John", "Doe", "+48123456789", "john.doe@example.com", "Wroclaw"), "44051401359", new BirthDate("1990-05-15"), 18);
-//        Patient patient1 = new Patient(1, new PersonalInfo("John1", "Doe", "+48123456789", "john.doe@example.com", "Wroclaw"), "44051401359", new BirthDate("1990-05-15"), 18);
-//        Patient patient2 = new Patient(1, new PersonalInfo("John2", "Smith", "+48123456789", "john.doe@example.com", "Wroclaw"), "44051401359", new BirthDate("1990-05-15"), 18);
-//
-//    }
 
     @Test
     public void testSetFirstNameCapitalizesFirstLetter() {
         patient.getPersonalInfo().setFirstName("john");
-        Assertions.assertEquals("John", patient.getPersonalInfo().getFirstName());
+        assertEquals("John", patient.getPersonalInfo().getFirstName());
 
         patient.getPersonalInfo().setFirstName("mARY");
-        Assertions.assertEquals("Mary", patient.getPersonalInfo().getFirstName());
+        assertEquals("Mary", patient.getPersonalInfo().getFirstName());
 
         patient.getPersonalInfo().setFirstName("alice");
-        Assertions.assertEquals("Alice", patient.getPersonalInfo().getFirstName());
+        assertEquals("Alice", patient.getPersonalInfo().getFirstName());
     }
 
     @Test
     public void testSetLastNameCapitalizesFirstLetter() {
         patient.getPersonalInfo().setLastName("doe");
-        Assertions.assertEquals("Doe", patient.getPersonalInfo().getLastName());
+        assertEquals("Doe", patient.getPersonalInfo().getLastName());
 
         patient.getPersonalInfo().setLastName("SMITH");
-        Assertions.assertEquals("Smith", patient.getPersonalInfo().getLastName());
+        assertEquals("Smith", patient.getPersonalInfo().getLastName());
 
         patient.getPersonalInfo().setLastName("cARLSON");
-        Assertions.assertEquals("Carlson", patient.getPersonalInfo().getLastName());
+        assertEquals("Carlson", patient.getPersonalInfo().getLastName());
     }
 
     @Test
@@ -62,17 +54,17 @@ public class Patient_Tests {
         Exception exception = Assertions.assertThrows(IllegalArgumentException.class, () -> {
             new Patient(1, new PersonalInfo("John", "Doe", "+48123456789", "invalid@email.com", "Wroclaw"), "44051401359", new BirthDate("1990-05-15"), -21);
         });
-        Assertions.assertEquals(exception.getMessage(), "Age cannot be negative");
+        assertEquals("Age cannot be negative", exception.getMessage());
     }
 
     @Test
     public void testValidPatientCreation() {
-        Assertions.assertEquals(patient.getPersonalInfo().getFirstName(), "John");
-        Assertions.assertEquals(patient.getPersonalInfo().getLastName(), "Doe");
-        Assertions.assertEquals(patient.getPesel(), "44051401359");
-        Assertions.assertEquals(patient.getAge(), 18);
-        Assertions.assertEquals(patient.getPersonalInfo().getPhoneNumber(), "+48123456789");
-        Assertions.assertEquals(patient.getPersonalInfo().getEmail(), "john.doe@example.com");
+        assertEquals("John", patient.getPersonalInfo().getFirstName());
+        assertEquals("Doe", patient.getPersonalInfo().getLastName());
+        assertEquals("44051401359", patient.getPesel());
+        assertEquals(18, patient.getAge());
+        assertEquals("+48123456789", patient.getPersonalInfo().getPhoneNumber());
+        assertEquals("john.doe@example.com", patient.getPersonalInfo().getEmail());
     }
 
     @Test
@@ -80,7 +72,7 @@ public class Patient_Tests {
         Exception exception = Assertions.assertThrows(IllegalArgumentException.class, () -> {
             new Patient(1, new PersonalInfo("John", "Doe", "+48123456789", "invalidemail.com", "Wroclaw"), "44051401359", new BirthDate("1990-05-15"), 18);
         });
-        Assertions.assertEquals(exception.getMessage(), "Invalid email format");
+        assertEquals("Invalid email format", exception.getMessage());
     }
 
     @Test
@@ -88,13 +80,13 @@ public class Patient_Tests {
         Exception exception = Assertions.assertThrows(IllegalArgumentException.class, () -> {
             new Patient(1, new PersonalInfo("John", "Doe", "+invalidNumber", "invalidemail.com", "Wroclaw"), "44051401359", new BirthDate("1990-05-15"), 18);
         });
-        Assertions.assertEquals(exception.getMessage(), "Invalid phone number format");
+        assertEquals("Invalid phone number format", exception.getMessage());
     }
 
     @Test
     public void testSetValidEmail() {
         patient.getPersonalInfo().setEmail("new.email@example.com");
-        Assertions.assertEquals(patient.getPersonalInfo().getEmail(), "new.email@example.com");
+        assertEquals("new.email@example.com", patient.getPersonalInfo().getEmail());
     }
 
     @Test
@@ -102,13 +94,13 @@ public class Patient_Tests {
         Exception exception = Assertions.assertThrows(IllegalArgumentException.class, () -> {
             patient.getPersonalInfo().setEmail("invalidemail.com");
         });
-        Assertions.assertEquals(exception.getMessage(), "Invalid email format");
+        assertEquals("Invalid email format", exception.getMessage());
     }
 
     @Test
     public void testSetValidPhoneNumber() {
         patient.getPersonalInfo().setPhoneNumber("+48123456790");
-        Assertions.assertEquals(patient.getPersonalInfo().getPhoneNumber(), "+48123456790");
+        assertEquals("+48123456790", patient.getPersonalInfo().getPhoneNumber());
     }
 
     @Test
@@ -116,14 +108,14 @@ public class Patient_Tests {
         Exception exception = Assertions.assertThrows(IllegalArgumentException.class, () -> {
             patient.getPersonalInfo().setPhoneNumber("invalidNumber");
         });
-        Assertions.assertEquals(exception.getMessage(), "Invalid phone number format");
+        assertEquals("Invalid phone number format", exception.getMessage());
     }
 
     @Test
     public void testSetPesel_ValidPesel() {
         String validPesel = "44051401359";
         patient.setPesel(validPesel);
-        Assertions.assertEquals(validPesel, patient.getPesel());
+        assertEquals(validPesel, patient.getPesel());
     }
 
     @Test
@@ -132,7 +124,7 @@ public class Patient_Tests {
         Exception exception = Assertions.assertThrows(IllegalArgumentException.class, () -> {
             patient.setPesel(invalidPesel);
         });
-        Assertions.assertEquals(exception.getMessage(), "Invalid PESEL format");
+        assertEquals("Invalid PESEL format", exception.getMessage());
     }
 
     @Test
@@ -141,7 +133,7 @@ public class Patient_Tests {
         Exception exception = Assertions.assertThrows(IllegalArgumentException.class, () -> {
             patient.setPesel(invalidPesel);
         });
-        Assertions.assertEquals(exception.getMessage(), "Invalid PESEL format");
+        assertEquals("Invalid PESEL format", exception.getMessage());
     }
 
     @Test
@@ -149,7 +141,7 @@ public class Patient_Tests {
         Exception exception = Assertions.assertThrows(IllegalArgumentException.class, () -> {
             patient.setPesel(null);
         });
-        Assertions.assertEquals(exception.getMessage(), "Invalid PESEL format");
+        assertEquals("Invalid PESEL format", exception.getMessage());
     }
 
 }
