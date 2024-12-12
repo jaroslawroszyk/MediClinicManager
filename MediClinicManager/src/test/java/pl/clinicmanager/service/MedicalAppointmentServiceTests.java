@@ -13,7 +13,7 @@ import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-class MedicalAppointmentService_Tests {
+class MedicalAppointmentServiceTests {
     private DoctorScheduleRepository scheduleRepository;
     private MedicalAppointmentRepository appointmentRepository;
     private MedicalAppointmentService appointmentService;
